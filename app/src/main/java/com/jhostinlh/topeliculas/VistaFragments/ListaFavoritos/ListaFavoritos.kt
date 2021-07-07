@@ -70,19 +70,9 @@ class ListaFavoritos : Fragment() {
             override fun onChanged(t: List<Pelicula>?) {
                 recyclerAdapter= FavoritosAdapterRecyclerView(t!! as ArrayList<Pelicula>,this@ListaFavoritos,viewModel)
 
+                Log.i("adaptador","itemCount es: "+recyclerAdapter.itemCount)
 
-                if (recyclerAdapter.itemCount == 0){
-                    topRatedRecycler.visibility = View.INVISIBLE
-
-                }else{
-                    Log.i("adaptador","itemCount es: "+recyclerAdapter.itemCount)
-
-
-                    topRatedRecycler.adapter = recyclerAdapter
-                }
-
-
-
+                topRatedRecycler.adapter = recyclerAdapter
 
             }
 

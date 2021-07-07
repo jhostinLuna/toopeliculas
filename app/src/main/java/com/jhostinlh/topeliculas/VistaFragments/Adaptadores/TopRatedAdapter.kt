@@ -1,6 +1,7 @@
 package com.jhostinlh.topeliculas.VistaFragments.Adaptadores
 
 
+import android.content.Intent
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
@@ -9,7 +10,6 @@ import android.widget.ImageView
 import android.widget.RatingBar
 import android.widget.TextView
 import androidx.fragment.app.Fragment
-import androidx.navigation.Navigation.findNavController
 import androidx.navigation.fragment.findNavController
 
 import androidx.recyclerview.widget.RecyclerView
@@ -70,6 +70,16 @@ class TopRatedAdapter constructor(
             viewModel.addFavorito(listTopRated[position])
 
         }
+        holder.whatsapp.setOnClickListener {
+
+            val intent: Intent = Intent().apply {
+                action = Intent.ACTION_SEND
+                putExtra(Intent.EXTRA_TEXT,"ESte es Texto")
+                type = "text/plain"
+            }
+            val shareIntent = Intent.createChooser(intent,"titulo de prueba")
+            context?.startActivity(shareIntent)
+        }
 
     }
     class Holder(itemView: View) : RecyclerView.ViewHolder(itemView) {
@@ -77,7 +87,8 @@ class TopRatedAdapter constructor(
         val ratinBar: RatingBar = itemView.findViewById(R.id.rtingbar_item_fr_top_rated)
         val imgPeli: ImageView = itemView.findViewById(R.id.img_portada_fr_item_toprated)
         val votos: TextView = itemView.findViewById(R.id.txt_votos_fr_item_toprated)
-        var favorito:ImageButton = itemView.findViewById(R.id.imageButton_favorito_itemtoprated)
+        var favorito: ImageButton = itemView.findViewById(R.id.imageButton_favorito_itemtoprated)
+        val whatsapp: ImageView = itemView.findViewById(R.id.imageView_whatsapp)
     }
 
     fun setFiltro(lista:ArrayList<Pelicula>){

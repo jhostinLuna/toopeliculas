@@ -55,7 +55,7 @@ class FavoritosAdapterRecyclerView constructor(
 
             context?.findNavController()?.navigate(action)
         }
-        holder.imgPeli.setOnClickListener {
+        holder.whatsapp.setOnClickListener {
 
             val intent: Intent = Intent().apply {
                 action = Intent.ACTION_SEND
@@ -95,7 +95,7 @@ class FavoritosAdapterRecyclerView constructor(
         val imgPeli: ImageView = itemView.findViewById(R.id.img_portada_fr_item_toprated)
         val votos: TextView = itemView.findViewById(R.id.txt_votos_fr_item_toprated)
         var favorito:ImageButton = itemView.findViewById(R.id.imageButton_favorito_itemtoprated)
-        val whatsapp: ImageButton = itemView.findViewById(R.id.imageView_whatsapp)
+        val whatsapp: ImageView = itemView.findViewById(R.id.imageView_whatsapp)
     }
 
     fun setFiltro(lista:ArrayList<Pelicula>){
