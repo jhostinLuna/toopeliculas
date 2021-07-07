@@ -9,7 +9,7 @@ buildscript {
     dependencies {
         def nav_version = "2.3.5"
 
-        classpath "com.android.tools.build:gradle:4.2.1"
+        classpath 'com.android.tools.build:gradle:4.2.2'
         classpath "org.jetbrains.kotlin:kotlin-gradle-plugin:$kotlin_version"
         classpath "androidx.navigation:navigation-safe-args-gradle-plugin:$nav_version"
 
@@ -22,7 +22,7 @@ allprojects {
     repositories {
         google()
         mavenCentral()
-        //jcenter() // Warning: this repository is going to shut down soon
+        jcenter() // Warning: this repository is going to shut down soon
     }
 }
 

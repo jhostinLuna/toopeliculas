@@ -4,7 +4,9 @@ import com.jhostinlh.topeliculas.Modelo.Dao.PelisDao
 import com.jhostinlh.topeliculas.Modelo.Entitys.Pelicula
 
 class ImplementPelisRepository(val pelisDao: PelisDao): PelisRepository {
-
+    override suspend fun getFavoritos(): List<Pelicula> {
+        return pelisDao.getFavoritos()
+    }
 
 
     override suspend fun getAllPelis(): List<Pelicula> {

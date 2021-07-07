@@ -2,8 +2,12 @@ package com.jhostinlh.topeliculas.Modelo.Dao
 
 import androidx.room.*
 import com.jhostinlh.topeliculas.Modelo.Entitys.Pelicula
+
 @Dao
 interface PelisDao {
+    @Query("select * from Pelicula where favorito = 1")
+    suspend fun getFavoritos(): List<Pelicula>
+
     @Query("select * from Pelicula ")
     suspend fun getAll(): List<Pelicula>
 
