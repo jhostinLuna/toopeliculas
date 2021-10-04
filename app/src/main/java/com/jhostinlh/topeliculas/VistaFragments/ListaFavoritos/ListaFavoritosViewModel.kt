@@ -1,25 +1,10 @@
 package com.jhostinlh.topeliculas.VistaFragments.ListaFavoritos
 
 import android.app.Application
-import android.util.Log
-import android.widget.Toast
 import androidx.lifecycle.AndroidViewModel
-import androidx.lifecycle.LiveData
-import androidx.lifecycle.MutableLiveData
-import androidx.lifecycle.viewModelScope
-import com.jhostinlh.tiempokotlin.Retrofit.MyApiAdapter
-import com.jhostinlh.tiempokotlin.Retrofit.MyApiService
-import com.jhostinlh.topeliculas.Data
-import com.jhostinlh.topeliculas.Modelo.Dao.PelisDao
-import com.jhostinlh.topeliculas.Modelo.Database.AppDataBase
-import com.jhostinlh.topeliculas.Modelo.Entitys.Pelicula
-import com.jhostinlh.topeliculas.Modelo.Repository.ImplementPelisRepository
-import com.jhostinlh.topeliculas.Modelo.Repository.PelisRepository
-import kotlinx.coroutines.Dispatchers
-import kotlinx.coroutines.launch
-import kotlinx.coroutines.withContext
 
 class ListaFavoritosViewModel(application: Application) : AndroidViewModel(application) {
+    /*
     private val listTopRated: MutableLiveData<ArrayList<Pelicula>> by lazy {
         MutableLiveData<ArrayList<Pelicula>>().also {
             loadTopRated()
@@ -34,6 +19,7 @@ class ListaFavoritosViewModel(application: Application) : AndroidViewModel(appli
     private val database = AppDataBase.getInstance(context)
     private val peliDao: PelisDao = database?.pelisDao()
     private val repository: PelisRepository = ImplementPelisRepository(peliDao)
+    /*
     private fun loadTopRated() {
 
 
@@ -45,14 +31,12 @@ class ListaFavoritosViewModel(application: Application) : AndroidViewModel(appli
                 Log.i("room","Respuesta correcta :"+peliculas.toString())
                 listTopRated.postValue(peliculas)
 
-                if (peliculas.isEmpty() ) {
-                    Toast.makeText(context,"¡La lista de Favoritos está Vacia!",Toast.LENGTH_LONG).show()
-
-                }
             }
         }
 
     }
+
+     */
     fun listaFiltrada(newText: String?): ArrayList<Pelicula>{
         var listaFiltrada:ArrayList<Pelicula> = arrayListOf<Pelicula>()
         val listaCopy: List<Pelicula>? = listTopRated.value
@@ -96,4 +80,6 @@ class ListaFavoritosViewModel(application: Application) : AndroidViewModel(appli
 
         }
     }
+
+     */
 }

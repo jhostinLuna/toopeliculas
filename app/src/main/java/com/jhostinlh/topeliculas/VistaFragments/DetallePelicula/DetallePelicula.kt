@@ -1,21 +1,23 @@
 package com.jhostinlh.topeliculas.VistaFragments.DetallePelicula
 
 import android.annotation.SuppressLint
+import android.content.ActivityNotFoundException
+import android.content.Intent
+import android.net.Uri
 import android.os.Bundle
 import android.util.Log
 import android.view.*
-import android.widget.Toast
 import androidx.fragment.app.Fragment
 import androidx.lifecycle.Observer
 import androidx.lifecycle.ViewModelProvider
-import androidx.navigation.findNavController
 import androidx.navigation.fragment.navArgs
-import androidx.navigation.ui.NavigationUI
+import com.bumptech.glide.Glide
+import com.jhostinlh.topeliculas.Data
 import com.jhostinlh.topeliculas.Modelo.Entitys.Pelicula
 import com.jhostinlh.topeliculas.Modelo.Entitys.ResultTrailer
+import com.jhostinlh.topeliculas.R
 import com.jhostinlh.topeliculas.databinding.FragmentDetallePeliculaBinding
-import com.pierfrancescosoffritti.androidyoutubeplayer.core.player.YouTubePlayer
-import com.pierfrancescosoffritti.androidyoutubeplayer.core.player.listeners.AbstractYouTubePlayerListener
+
 
 
 // TODO: Rename parameter arguments, choose names that match
@@ -62,21 +64,16 @@ class DetallePelicula : Fragment() {
 
         // Inflate the layout for this fragment
         Log.i("peli",pelicula.toString())
-        lifecycle.addObserver(binding.videoTrailerFrDetallepelicula)
         viewModel.getListTrailer().observe(viewLifecycleOwner,
             object : Observer<List<ResultTrailer>>{
                 override fun onChanged(listaTrailers: List<ResultTrailer>?) {
                     if (!listaTrailers.isNullOrEmpty()) {
-                        binding.videoTrailerFrDetallepelicula.addYouTubePlayerListener(
-                            object : AbstractYouTubePlayerListener() {
-                                override fun onReady(youTubePlayer: YouTubePlayer) {
-                                    val videoId = listaTrailers[0].key
-                                    youTubePlayer.loadVideo(videoId, 0f)
-                                }
-                            })
+                        binding.imageViewVerTrailer.setOnClickListener {
+                            watchYoutubeVideo(listaTrailers.get(0).key)
+                        }
                     }else{
-                        Toast.makeText(activity?.applicationContext,"Lo siento pero no hemos encontrado Trailers disponibles",Toast.LENGTH_LONG).show()
-
+                        binding.imageViewVerTrailer.setImageResource(R.drawable.llorando)
+                        binding.textViewVerTrailer.text = "Lo siento no hemos encontrado ningun trailer disponible."
                     }
 
 
@@ -91,11 +88,26 @@ class DetallePelicula : Fragment() {
         binding.txtIdiomaFrDetallepelicula!!.text = pelicula.originalLanguage
         binding.txtTitleoriginFrDetallepelicula!!.text = pelicula.originalTitle
         binding.txtFechapublicacionFrDetallepelicula!!.text = pelicula.releaseDate
+        Glide.with(binding.root).load(Data.URL_BASE_IMG +pelicula.backdropPath).into(binding.imageViewDetallePelicula)
+
 
         return binding.root
 
     }
 
+    fun watchYoutubeVideo(id: String) {
+        val appIntent = Intent(Intent.ACTION_VIEW, Uri.parse("vnd.youtube:$id"))
+        val webIntent = Intent(
+            Intent.ACTION_VIEW,
+            Uri.parse("http://www.youtube.com/watch?v=$id")
+        )
+        try {
+            context?.startActivity(appIntent)
+        } catch (ex: ActivityNotFoundException) {
+            context?.startActivity(webIntent)
+        }
+    }
+/*
     override fun onCreateOptionsMenu(menu: Menu, inflater: MenuInflater) {
         super.onCreateOptionsMenu(menu, inflater)
         inflater.inflate(com.jhostinlh.topeliculas.R.menu.menu, menu)
@@ -106,6 +118,8 @@ class DetallePelicula : Fragment() {
         onNavDestinationSelected(item,requireView().findNavController())
                 || super.onOptionsItemSelected(item)
     }
+
+ */
 
     companion object {
         /**

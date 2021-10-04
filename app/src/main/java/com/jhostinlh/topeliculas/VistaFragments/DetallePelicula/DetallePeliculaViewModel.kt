@@ -50,7 +50,7 @@ class DetallePeliculaViewModel(application: Application, pelicula: Pelicula) : A
                     listTrailer.postValue(listaTrail)
 
                 }else{
-                    val call = apiService?.getVideos(idPelicula,Data.API_KEY, Data.LENGUAGE)?.execute()
+                    val call = apiService?.getVideos(idPelicula, Data.API_KEY, Data.LENGUAGE)?.execute()
                     val objectVideo = call?.body()
 
                     if (objectVideo != null) {

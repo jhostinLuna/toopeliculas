@@ -1,7 +1,9 @@
 package com.jhostinlh.topeliculas.VistaFragments.Adaptadores
 
 
+import android.content.ActivityNotFoundException
 import android.content.Intent
+import android.net.Uri
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
@@ -11,7 +13,6 @@ import android.widget.RatingBar
 import android.widget.TextView
 import androidx.fragment.app.Fragment
 import androidx.navigation.fragment.findNavController
-
 import androidx.recyclerview.widget.RecyclerView
 import com.bumptech.glide.Glide
 import com.jhostinlh.topeliculas.Data
@@ -42,6 +43,7 @@ class TopRatedAdapter constructor(
 
 
     override fun onBindViewHolder(holder: Holder, position: Int) {
+
         holder.txtTitulo.text = listTopRated[position].title
         holder.ratinBar.rating = (listTopRated[position].voteAverage.toFloat()*5)/10
         Glide.with(holder.itemView).load(Data.URL_BASE_IMG +listTopRated[position].posterPath).into(holder.imgPeli)
@@ -54,13 +56,11 @@ class TopRatedAdapter constructor(
             val pelicula = listTopRated[position]
             val action = ListTopRatedDirections.actionListTopRatedToDetallePelicula(pelicula)
 
-            if (context != null) {
-                context.findNavController().navigate(action)
-            }
+            context?.findNavController()?.navigate(action)
         }
 
         holder.favorito.setOnClickListener {
-            if (listTopRated[position].favorito == true){
+            if (listTopRated[position].favorito){
                 listTopRated[position].favorito = false
                 holder.favorito.setImageResource(R.drawable.corazonfalse)
             }else{
@@ -72,16 +72,32 @@ class TopRatedAdapter constructor(
         }
         holder.whatsapp.setOnClickListener {
 
+
             val intent: Intent = Intent().apply {
                 action = Intent.ACTION_SEND
-                putExtra(Intent.EXTRA_TEXT,"ESte es Texto")
+                putExtra(Intent.EXTRA_TEXT, listTopRated[position].overview)
+                putExtra(Intent.EXTRA_TITLE,listTopRated[position].originalTitle)
                 type = "text/plain"
             }
-            val shareIntent = Intent.createChooser(intent,"titulo de prueba")
+            val shareIntent = Intent.createChooser(intent, "titulo de prueba")
             context?.startActivity(shareIntent)
         }
 
     }
+
+    fun watchYoutubeVideo(id: String) {
+        val appIntent = Intent(Intent.ACTION_VIEW, Uri.parse("vnd.youtube:$id"))
+        val webIntent = Intent(
+            Intent.ACTION_VIEW,
+            Uri.parse("http://www.youtube.com/watch?v=$id")
+        )
+        try {
+            context?.startActivity(appIntent)
+        } catch (ex: ActivityNotFoundException) {
+            context?.startActivity(webIntent)
+        }
+    }
+
     class Holder(itemView: View) : RecyclerView.ViewHolder(itemView) {
         val txtTitulo: TextView = itemView.findViewById(R.id.txt_titulo_item_fr_toprated)
         val ratinBar: RatingBar = itemView.findViewById(R.id.rtingbar_item_fr_top_rated)

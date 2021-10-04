@@ -1,62 +1,60 @@
 package com.jhostinlh.topeliculas.VistaFragments.ListTopRated
 
-import android.app.Application
+
 import android.util.Log
 import androidx.lifecycle.*
-import com.jhostinlh.tiempokotlin.Retrofit.MyApiAdapter
-import com.jhostinlh.tiempokotlin.Retrofit.MyApiService
-import com.jhostinlh.topeliculas.Data
-import com.jhostinlh.topeliculas.Modelo.Dao.PelisDao
-import com.jhostinlh.topeliculas.Modelo.Database.AppDataBase
 import com.jhostinlh.topeliculas.Modelo.Entitys.Pelicula
+import com.jhostinlh.topeliculas.Modelo.Entitys.ResultTrailer
 import com.jhostinlh.topeliculas.Modelo.Repository.ImplementPelisRepository
-import com.jhostinlh.topeliculas.Modelo.Repository.PelisRepository
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
 import kotlinx.coroutines.withContext
 
-class ListTopRatedViewModel(application: Application) : AndroidViewModel(application) {
+data class ListTopRatedViewModel(val repository: ImplementPelisRepository) : ViewModel() {
+    //val listTopRated: LiveData<List<Pelicula>> = repository.listTopRated!!.asLiveData()
+    val listFavorites: LiveData<List<Pelicula>> = repository.repoFavorite.asLiveData()
     private val listTopRated: MutableLiveData<List<Pelicula>> by lazy {
         MutableLiveData<List<Pelicula>>().also {
-            loadTopRated()
+                loadLista()
         }
     }
+    fun loadLista(){
+        viewModelScope.launch(Dispatchers.IO) {
+            repository.actualizarTopRated()
+            listTopRated.postValue(repository.listTopRated)
+        }
+    }
+    init {
+        for (movie in repository.listTopRated) Log.i("pruebita",movie.toString())
 
+    }
 
     fun getTopRated(): LiveData<List<Pelicula>> {
         return listTopRated
     }
-    private val context = getApplication<Application>().applicationContext
-    private val database = AppDataBase.getInstance(context)
-    private val peliDao: PelisDao = database?.pelisDao()
-    private val repository: PelisRepository = ImplementPelisRepository(peliDao)
-    private fun loadTopRated() {
+    fun getFavorites(): LiveData<List<Pelicula>> {
+        return listFavorites
+    }
 
 
-            val apiService: MyApiService? = MyApiAdapter.getApiService()
-            viewModelScope.launch {
-                val a = withContext(Dispatchers.IO){
 
+    /*
+    private suspend fun actualizarTopRated(){
+        val call = apiService?.topRated(Data.API_KEY, Data.LENGUAGE)?.execute()
+        val lista = call?.body()?.results
+        if (!lista?.equals(listTopRated.value)!!){
+            listTopRated.postValue(lista)
 
-                    val peliculas = repository.getAllPelis()
-                    Log.i("room","Respuesta correcta :"+peliculas.toString())
-                    if (peliculas.isNotEmpty() ) {
-                        listTopRated.postValue(peliculas)
-
-                    }else{
-                        val call = apiService?.topRated(Data.API_KEY, Data.LENGUAGE)?.execute()
-                        val lista = call?.body()?.results
-                            listTopRated.postValue(lista)
-                        if (lista != null) {
-                            for (movie in lista){
-                                repository.insertPeli(movie)
-                            }
-                        }
-                    }
-                }
+            for (movie in lista){
+                repository.insertPeli(movie)
             }
 
+        }
     }
+
+
+    */
+
     fun listaFiltrada(newText: String?): ArrayList<Pelicula>{
         var listaFiltrada:ArrayList<Pelicula> = arrayListOf<Pelicula>()
         val listaCopy: List<Pelicula>? = listTopRated.value
@@ -71,6 +69,9 @@ class ListTopRatedViewModel(application: Application) : AndroidViewModel(applica
 
         return listaFiltrada
     }
+
+
+
     fun addFavorito(peli: Pelicula){
         viewModelScope.launch {
             Log.i("fav","es: "+peli.toString())
@@ -81,4 +82,19 @@ class ListTopRatedViewModel(application: Application) : AndroidViewModel(applica
 
         }
     }
+    fun remove(peli: Pelicula){
+        viewModelScope.launch{
+            val ok = repository.deletePeli(peli)
+
+        }
+
+
+    }
+
+    fun actualizaTopRated(){
+        viewModelScope.launch {
+            val ok = repository.actualizarTopRated()
+        }
+    }
+
 }

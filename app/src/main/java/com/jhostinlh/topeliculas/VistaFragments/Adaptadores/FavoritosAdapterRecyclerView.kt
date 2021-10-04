@@ -6,7 +6,6 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.widget.*
-import androidx.core.content.ContextCompat.startActivity
 import androidx.fragment.app.Fragment
 import androidx.navigation.fragment.findNavController
 
@@ -15,14 +14,16 @@ import com.bumptech.glide.Glide
 import com.jhostinlh.topeliculas.Data
 import com.jhostinlh.topeliculas.Modelo.Entitys.Pelicula
 import com.jhostinlh.topeliculas.R
-import com.jhostinlh.topeliculas.VistaFragments.ListTopRated.ListTopRatedDirections
-import com.jhostinlh.topeliculas.VistaFragments.ListaFavoritos.ListaFavoritosViewModel
+import com.jhostinlh.topeliculas.VistaFragments.ListTopRated.ListTopRatedViewModel
+import com.jhostinlh.topeliculas.VistaFragments.ListaFavoritos.ListaFavoritosDirections
+import java.util.*
+import kotlin.collections.ArrayList
 
 
 class FavoritosAdapterRecyclerView constructor(
     var listTopRated: ArrayList<Pelicula>,
     val context: Fragment?,
-    val viewModel: ListaFavoritosViewModel
+    val viewModel: ListTopRatedViewModel
 ): RecyclerView.Adapter<FavoritosAdapterRecyclerView.Holder>() {
 
 
@@ -41,51 +42,62 @@ class FavoritosAdapterRecyclerView constructor(
 
     override fun onBindViewHolder(holder: Holder, position: Int) {
 
-        holder.txtTitulo.text = listTopRated[position].title
-        holder.ratinBar.rating = (listTopRated[position].voteAverage.toFloat()*5)/10
-        Glide.with(holder.itemView).load(Data.URL_BASE_IMG +listTopRated[position].posterPath).into(holder.imgPeli)
-        holder.votos.text = ""+listTopRated[position].voteCount
-        if (listTopRated[position].favorito==true){
-            holder.favorito.setImageResource(R.drawable.corazontrue)
-        }
+        if (listTopRated.size == 0){
 
-        holder.itemView.setOnClickListener {
-            val pelicula = listTopRated[position]
-            val action = ListTopRatedDirections.actionListTopRatedToDetallePelicula(pelicula)
+            notifyDataSetChanged()
 
-            context?.findNavController()?.navigate(action)
-        }
-        holder.whatsapp.setOnClickListener {
+        }else {
 
-            val intent: Intent = Intent().apply {
-                action = Intent.ACTION_SEND
-                putExtra(Intent.EXTRA_TEXT,"ESte es Texto")
-                type = "text/plain"
+            holder.txtTitulo.text = listTopRated[position].title
+            holder.ratinBar.rating = (listTopRated[position].voteAverage.toFloat() * 5) / 10
+            Glide.with(holder.itemView).load(Data.URL_BASE_IMG + listTopRated[position].posterPath)
+                .into(holder.imgPeli)
+            holder.votos.text = "" + listTopRated[position].voteCount
+            if (listTopRated[position].favorito == true) {
+                holder.favorito.setImageResource(R.drawable.corazontrue)
             }
-            val shareIntent = Intent.createChooser(intent,"titulo de prueba")
-            context?.startActivity(shareIntent)
-        }
 
-        holder.favorito.setOnClickListener {
+            holder.itemView.setOnClickListener {
+                val pelicula = listTopRated[position]
+                val action = ListaFavoritosDirections.actionListaFavoritosToDetallePelicula(pelicula)
 
-            if (listTopRated[position].favorito){
-                listTopRated[position].favorito = false
+                context?.findNavController()?.navigate(action)
+            }
+            holder.whatsapp.setOnClickListener {
 
-                holder.favorito.setImageResource(R.drawable.corazonfalse)
-                viewModel.addFavorito(listTopRated[position])
-
-
-                val copy = listTopRated.removeAt(position)
-
-                if (context != null) {
-                    Toast.makeText(context.context,"position = ${position} -- tamaño de lista: -> "+listTopRated.size,Toast.LENGTH_LONG).show()
+                val intent: Intent = Intent().apply {
+                    action = Intent.ACTION_SEND
+                    putExtra(Intent.EXTRA_TEXT, listTopRated[position].overview)
+                    putExtra(Intent.EXTRA_TITLE,listTopRated.get(position).title)
+                    type = "text/plain"
                 }
-                viewModel.verifyContain(copy)
-                notifyDataSetChanged()
-                notifyItemRemoved(position)
+                val shareIntent = Intent.createChooser(intent, "titulo de prueba")
+                context?.startActivity(shareIntent)
             }
 
+            holder.favorito.setOnClickListener {
+                if (listTopRated[position].favorito) {
+                    listTopRated[position].favorito = false
 
+                    holder.favorito.setImageResource(R.drawable.corazonfalse)
+                    viewModel.addFavorito(listTopRated[position])
+
+
+                    val copy = listTopRated.removeAt(position)
+
+                    if (context != null) {
+                        Toast.makeText(
+                            context.context,
+                            "position = ${position} -- tamaño de lista: -> " + listTopRated.size,
+                            Toast.LENGTH_LONG
+                        ).show()
+                    }
+                    notifyDataSetChanged()
+                    notifyItemRemoved(position)
+                }
+
+
+            }
         }
 
     }

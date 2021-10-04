@@ -1,21 +1,22 @@
 package com.jhostinlh.topeliculas.VistaFragments.ListTopRated
 
+import android.app.Application
 import android.os.Bundle
 import android.text.Editable
 import android.text.TextWatcher
 import android.util.Log
 import android.view.*
 import androidx.fragment.app.Fragment
+import androidx.fragment.app.activityViewModels
+import androidx.fragment.app.viewModels
 import androidx.lifecycle.Observer
 import androidx.lifecycle.ViewModelProvider
-import androidx.navigation.findNavController
-import androidx.navigation.ui.NavigationUI
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import com.jhostinlh.topeliculas.Modelo.Entitys.Pelicula
-import com.jhostinlh.topeliculas.R
 import com.jhostinlh.topeliculas.VistaFragments.Adaptadores.TopRatedAdapter
 import com.jhostinlh.topeliculas.databinding.FragmentListTopRatedBinding
+import com.jhostinlh.topeliculas.topRatedAplication
 
 // TODO: Rename parameter arguments, choose names that match
 // the fragment initialization parameters, e.g. ARG_ITEM_NUMBER
@@ -32,9 +33,11 @@ class ListTopRated : Fragment() {
     private var param1: String? = null
     private var param2: String? = null
     lateinit var topRatedRecycler: RecyclerView
-    lateinit var viewModel: ListTopRatedViewModel
     lateinit var recyclerAdapter: TopRatedAdapter
     lateinit var binding: FragmentListTopRatedBinding
+    val viewModel: ListTopRatedViewModel by activityViewModels() {
+        ListTopRatedViewModelFactory((context?.applicationContext as topRatedAplication).repository)
+    }
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -42,9 +45,9 @@ class ListTopRated : Fragment() {
             param1 = it.getString(ARG_PARAM1)
             param2 = it.getString(ARG_PARAM2)
         }
-
-        viewModel = ViewModelProvider(this).get(ListTopRatedViewModel::class.java)
+        //viewModel = ViewModelProvider(this).get(ListTopRatedViewModel::class.java)
         recyclerAdapter = TopRatedAdapter(emptyList(), this,viewModel)
+        viewModel.actualizaTopRated()
     }
 
     override fun onCreateView(
@@ -52,11 +55,12 @@ class ListTopRated : Fragment() {
         savedInstanceState: Bundle?
     ): View? {
         // Inflate the layout for this fragment
+
         binding = FragmentListTopRatedBinding.inflate(inflater,container,false)
 
         setHasOptionsMenu(true)
         topRatedRecycler = binding.topRatedRecyclerLf
-        topRatedRecycler.layoutManager = LinearLayoutManager(context,
+        topRatedRecycler.layoutManager = LinearLayoutManager(this.context,
             LinearLayoutManager.VERTICAL,false)
 
         /*
@@ -70,6 +74,8 @@ class ListTopRated : Fragment() {
 
         viewModel.getTopRated().observe(viewLifecycleOwner,object : Observer<List<Pelicula>>{
             override fun onChanged(t: List<Pelicula>?) {
+                for (movie in t!!) Log.i("probando",movie.toString())
+
                 recyclerAdapter= TopRatedAdapter(t!!,this@ListTopRated,viewModel)
 
                 topRatedRecycler.adapter = recyclerAdapter
@@ -91,20 +97,14 @@ class ListTopRated : Fragment() {
         })
 
 
-
-
-
-
-        Log.i("listaPelis","Tiene: "+ (viewModel.getTopRated().value?.get(0)?.backdropPath ?: emptyList<Pelicula>()))
-
-
-
         return binding.root
     }
 
+/*
     override fun onCreateOptionsMenu(menu: Menu, inflater: MenuInflater) {
         super.onCreateOptionsMenu(menu, inflater)
         inflater.inflate(R.menu.menu, menu)
+
     }
 
     override fun onOptionsItemSelected(item: MenuItem): Boolean {
@@ -112,6 +112,9 @@ class ListTopRated : Fragment() {
         onNavDestinationSelected(item,requireView().findNavController())
                 || super.onOptionsItemSelected(item)
     }
+
+
+ */
 
     companion object {
         /**

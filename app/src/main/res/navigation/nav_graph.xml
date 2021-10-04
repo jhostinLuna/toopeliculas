@@ -7,8 +7,8 @@
     <fragment
         android:id="@+id/listTopRated"
         android:name="com.jhostinlh.topeliculas.VistaFragments.ListTopRated.ListTopRated"
-        android:label="fragment_list_top_rated"
-        tools:layout="@layout/fragment_list_top_rated" >
+        android:label="@string/label_topRater"
+        tools:layout="@layout/fragment_list_top_rated">
         <action
             android:id="@+id/action_listTopRated_to_detallePelicula"
             app:destination="@id/detallePelicula" />
@@ -18,18 +18,23 @@
     </fragment>
     <fragment
         android:id="@+id/detallePelicula"
-        android:name="com.jhostinlh.topeliculas.VistaFragments.DetallePelicula.DetallePelicula"
-        android:label="DetallePelicula" >
-        <action
-            android:id="@+id/action_detallePelicula_to_listaFavoritos"
-            app:destination="@id/listaFavoritos" />
+        android:name="com.jhostinlh.topeliculas.VistaFragments.DetallePelicula.DetallePelicula">
         <argument
             android:name="peli"
-            app:argType="com.jhostinlh.topeliculas.Modelo.Entitys.Pelicula"/>
+            app:argType="com.jhostinlh.topeliculas.Modelo.Entitys.Pelicula" />
     </fragment>
     <fragment
         android:id="@+id/listaFavoritos"
         android:name="com.jhostinlh.topeliculas.VistaFragments.ListaFavoritos.ListaFavoritos"
-        android:label="fragment_lista_favoritos"
-        tools:layout="@layout/fragment_lista_favoritos" />
+        android:label="@string/label_favoritos"
+        tools:layout="@layout/fragment_lista_favoritos">
+        <action
+            android:id="@+id/action_listaFavoritos_to_detallePelicula"
+            app:destination="@id/detallePelicula" />
+    </fragment>
+    <fragment
+        android:id="@+id/buscarPeli"
+        android:name="com.jhostinlh.topeliculas.VistaFragments.buscarPeli.BuscarPeli"
+        android:label="@string/label_searchMovie"
+        tools:layout="@layout/fragment_buscar_peli" />
 </navigation>

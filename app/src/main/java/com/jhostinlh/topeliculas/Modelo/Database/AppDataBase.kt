@@ -9,7 +9,7 @@ import com.jhostinlh.topeliculas.Modelo.Dao.PelisDao
 import com.jhostinlh.topeliculas.Modelo.Entitys.Pelicula
 import com.jhostinlh.topeliculas.Modelo.Entitys.ResultTrailer
 
-@Database(entities = [Pelicula::class,ResultTrailer::class], version = 5)
+@Database(entities = [Pelicula::class,ResultTrailer::class], version = 5, exportSchema = false)
 abstract class AppDataBase: RoomDatabase() {
     companion object{
         var INSTANCE: AppDataBase? = null

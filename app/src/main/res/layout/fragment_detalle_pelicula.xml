@@ -7,17 +7,8 @@
     tools:context="com.jhostinlh.topeliculas.VistaFragments.DetallePelicula.DetallePelicula"
     android:layout_marginTop="?attr/actionBarSize">
 
-    <com.pierfrancescosoffritti.androidyoutubeplayer.core.player.views.YouTubePlayerView
-        android:id="@+id/video_trailer_fr_detallepelicula"
-        android:layout_width="wrap_content"
-        android:layout_height="0dp"
-        app:layout_constraintBottom_toTopOf="@+id/guideline4"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="parent"
-        app:showFullScreenButton="true" />
-
     <LinearLayout
+        android:id="@+id/linearLayout2"
         android:layout_width="0dp"
         android:layout_height="0dp"
         android:orientation="vertical"
@@ -25,34 +16,30 @@
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/video_trailer_fr_detallepelicula">
+        app:layout_constraintTop_toTopOf="@+id/guideline4">
 
         <TextView
             android:id="@+id/txt_trailer_fr_detallepelicula"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:layout_marginTop="10dp"
             android:layout_marginBottom="10dp"
             android:text="titulo"
             android:textAlignment="center"
-            android:textSize="18sp" />
-
-        <TextView
-            android:id="@+id/default_description_fr_detallepelicula"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:text="Descripción:" />
+            android:textSize="18sp"
+            android:textStyle="bold" />
 
         <TextView
             android:id="@+id/txt_description_fr_detallepelicula"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:text="Lorem Ipsum is simply dummy text of the printing and typesetting industry. Lorem Ipsum has been the industry's standard dummy text ever since the 1500s, when an unknown printer took a galley of type and scrambled it to make a type specimen book. It has survived not only five centuries, but also the leap into electronic typesetting, remaining essentially unchanged. It was popularised in the 1960s with the release of Letraset sheets containing Lorem Ipsum passages, and more recently with desktop publishing software like Aldus PageMaker including versions of Lorem Ipsum." />
+            android:text="Lorem Ipsum is simply dummy text of the printing and typesetting industry. Lorem Ipsum has been the industry's standard dummy text ever since the 1500s, when an unknown printer took a galley of type and scrambled it to make a type specimen book. It has survived not only five centuries, but also the leap into electronic typesetting, remaining essentially unchanged. It was popularised in the 1960s with the release of Letraset sheets containing Lorem Ipsum passages, and more recently with desktop publishing software like Aldus PageMaker including versions of Lorem Ipsum."
+            android:textSize="14sp" />
 
         <LinearLayout
             android:id="@+id/linearlayout_idioma"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
+            android:layout_marginTop="5dp"
             android:layout_marginBottom="0dp"
             android:orientation="horizontal">
 
@@ -61,7 +48,8 @@
                 android:layout_width="0dp"
                 android:layout_height="wrap_content"
                 android:layout_weight=".5"
-                android:text="Idioma: " />
+                android:text="Idioma: "
+                android:textStyle="bold|italic" />
 
             <TextView
                 android:id="@+id/txt_idioma_fr_detallepelicula"
@@ -75,7 +63,9 @@
             android:id="@+id/default_titleorigin_fr_detallepelicula"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:text="Título original" />
+            android:layout_marginTop="5dp"
+            android:text="Título original:"
+            android:textStyle="bold|italic" />
 
         <TextView
             android:id="@+id/txt_titleorigin_fr_detallepelicula"
@@ -86,6 +76,7 @@
         <LinearLayout
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
+            android:layout_marginTop="5dp"
             android:orientation="horizontal">
 
             <TextView
@@ -93,7 +84,8 @@
                 android:layout_width="0dp"
                 android:layout_height="wrap_content"
                 android:layout_weight=".5"
-                android:text="Estreno: " />
+                android:text="Estreno: "
+                android:textStyle="bold|italic" />
 
             <TextView
                 android:id="@+id/txt_fechapublicacion_fr_detallepelicula"
@@ -104,6 +96,30 @@
 
         </LinearLayout>
 
+        <LinearLayout
+            android:id="@+id/linearLayout_trailerDisponible"
+            android:layout_width="match_parent"
+            android:layout_height="50dp"
+            android:gravity="center"
+            android:orientation="horizontal">
+
+            <TextView
+                android:id="@+id/textView_verTrailer"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_weight="1"
+                android:text="Ver Trailer disponible....."
+                android:textAlignment="center"
+                android:textSize="20sp" />
+
+            <ImageView
+                android:id="@+id/imageView_verTrailer"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_weight="1"
+                android:src="@drawable/youtube" />
+        </LinearLayout>
+
     </LinearLayout>
 
     <androidx.constraintlayout.widget.Guideline
@@ -111,6 +127,16 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:orientation="horizontal"
-        app:layout_constraintGuide_percent="0.5" />
+        app:layout_constraintGuide_percent="0.30" />
+
+    <ImageView
+        android:id="@+id/imageView_detallePelicula"
+        android:layout_width="0dp"
+        android:layout_height="0dp"
+        app:layout_constraintBottom_toTopOf="@+id/guideline4"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent"
+        tools:src="@tools:sample/avatars" />
 
 </androidx.constraintlayout.widget.ConstraintLayout>

@@ -4,23 +4,27 @@
     xmlns:app="http://schemas.android.com/apk/res-auto"
     tools:context=".MainActivity">
 
+    <!--
     <item
-        android:id="@+id/icon_item"
+        android:id="@+id/listTopRated"
         android:title="icono"
-        android:icon="@drawable/avengers"
-        app:showAsAction="never"
+        android:icon="@drawable/llorando"
+        app:showAsAction="always"
         android:orderInCategory="0"/>
     <item
         android:id="@+id/listaFavoritos"
-        android:title="@string/app_name"
+        android:title="@string/item_favoritos"
         android:orderInCategory="2"
         app:showAsAction="never"/>
+
     <item
-        android:id="@+id/buscador_item"
+        android:id="@+id/buscarPeli"
         android:title="buscador"
         android:icon="@android:drawable/ic_menu_search"
         app:showAsAction="always"
         android:orderInCategory="3"
         app:actionViewClass="androidx.appcompat.widget.SearchView" />
+        -->
+
 
 </menu>

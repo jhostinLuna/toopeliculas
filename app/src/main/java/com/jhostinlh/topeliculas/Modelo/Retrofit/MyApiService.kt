@@ -10,9 +10,13 @@ import retrofit2.http.Path
 import retrofit2.http.Query
 
 interface MyApiService {
-    @GET("top_rated")
-    fun topRated(@Query("api_key") api_key: String,
-                         @Query("language") idioma: String): Call<TopRated>
+    @GET("{nameList}")
+    fun topRated(@Path(value ="nameList" ) value:String,
+                 @Query("api_key") api_key: String,
+                 @Query("language") idioma: String): Call<TopRated>
+    @GET("popular")
+    fun listPopular(@Query("api_key") api_key: String,
+                 @Query("language") idioma: String): Call<TopRated>
 
     @GET("{id}/videos")
     fun getVideos(@Path(value="id") movie_id: Int,

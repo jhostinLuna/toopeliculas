@@ -8,6 +8,7 @@ import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import androidx.fragment.app.activityViewModels
 import androidx.lifecycle.Observer
 import androidx.lifecycle.ViewModelProvider
 import androidx.recyclerview.widget.LinearLayoutManager
@@ -17,8 +18,10 @@ import com.jhostinlh.topeliculas.R
 import com.jhostinlh.topeliculas.VistaFragments.Adaptadores.FavoritosAdapterRecyclerView
 import com.jhostinlh.topeliculas.VistaFragments.ListTopRated.ListTopRatedViewModel
 import com.jhostinlh.topeliculas.VistaFragments.Adaptadores.TopRatedAdapter
+import com.jhostinlh.topeliculas.VistaFragments.ListTopRated.ListTopRatedViewModelFactory
 import com.jhostinlh.topeliculas.databinding.FragmentListTopRatedBinding
 import com.jhostinlh.topeliculas.databinding.FragmentListaFavoritosBinding
+import com.jhostinlh.topeliculas.topRatedAplication
 
 // TODO: Rename parameter arguments, choose names that match
 // the fragment initialization parameters, e.g. ARG_ITEM_NUMBER
@@ -36,18 +39,20 @@ class ListaFavoritos : Fragment() {
     private var param2: String? = null
 
     lateinit var topRatedRecycler: RecyclerView
-    lateinit var viewModel: ListaFavoritosViewModel
+    val viewModel: ListTopRatedViewModel by activityViewModels() {
+        ListTopRatedViewModelFactory((context?.applicationContext as topRatedAplication).repository)
+    }
     lateinit var recyclerAdapter: FavoritosAdapterRecyclerView
     lateinit var binding: FragmentListaFavoritosBinding
-
+    private var num = 0
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         arguments?.let {
             param1 = it.getString(ARG_PARAM1)
             param2 = it.getString(ARG_PARAM2)
         }
-        viewModel = ViewModelProvider(this).get(ListaFavoritosViewModel::class.java)
-        recyclerAdapter = FavoritosAdapterRecyclerView(ArrayList(), this,viewModel)
+        //viewModel = ViewModelProvider(this).get(ListaFavoritosViewModel::class.java)
+        Log.i("creado","${num++} veces")
     }
 
     override fun onCreateView(
@@ -61,18 +66,19 @@ class ListaFavoritos : Fragment() {
         setHasOptionsMenu(true)
         topRatedRecycler = binding.topRatedRecyclerLf
         topRatedRecycler.layoutManager = LinearLayoutManager(
-            context,
+            this.context,
             LinearLayoutManager.VERTICAL,false)
 
+        topRatedRecycler.setHasFixedSize(true)
 
-
-        viewModel.getTopRated().observe(viewLifecycleOwner,object : Observer<List<Pelicula>> {
+        viewModel.getFavorites().observe(viewLifecycleOwner,object : Observer<List<Pelicula>> {
             override fun onChanged(t: List<Pelicula>?) {
                 recyclerAdapter= FavoritosAdapterRecyclerView(t!! as ArrayList<Pelicula>,this@ListaFavoritos,viewModel)
 
                 Log.i("adaptador","itemCount es: "+recyclerAdapter.itemCount)
 
                 topRatedRecycler.adapter = recyclerAdapter
+
 
             }
 
