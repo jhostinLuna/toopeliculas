@@ -18,15 +18,15 @@ import com.bumptech.glide.Glide
 import com.jhostinlh.topeliculas.Data
 import com.jhostinlh.topeliculas.Modelo.Entitys.Pelicula
 import com.jhostinlh.topeliculas.R
-import com.jhostinlh.topeliculas.VistaFragments.ListTopRated.ListTopRatedDirections
-import com.jhostinlh.topeliculas.VistaFragments.ListTopRated.ListTopRatedViewModel
+import com.jhostinlh.topeliculas.VistaFragments.ListTopRatedDirections
+import com.jhostinlh.topeliculas.ViewModel.ShareRepoViewModel
 
 
-class TopRatedAdapter constructor(
+class ListPeliculasAdapter constructor(
     var listTopRated: List<Pelicula>,
     val context: Fragment?,
-    val viewModel: ListTopRatedViewModel
-): RecyclerView.Adapter<TopRatedAdapter.Holder>() {
+    val viewModel: ShareRepoViewModel
+): RecyclerView.Adapter<ListPeliculasAdapter.Holder>() {
 
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): Holder {

@@ -3,10 +3,10 @@
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:id="@+id/nav_graph"
-    app:startDestination="@id/listTopRated">
+    app:startDestination="@id/groupList">
     <fragment
         android:id="@+id/listTopRated"
-        android:name="com.jhostinlh.topeliculas.VistaFragments.ListTopRated.ListTopRated"
+        android:name="com.jhostinlh.topeliculas.VistaFragments.ListTopRated"
         android:label="@string/label_topRater"
         tools:layout="@layout/fragment_list_top_rated">
         <action
@@ -18,14 +18,14 @@
     </fragment>
     <fragment
         android:id="@+id/detallePelicula"
-        android:name="com.jhostinlh.topeliculas.VistaFragments.DetallePelicula.DetallePelicula">
+        android:name="com.jhostinlh.topeliculas.VistaFragments.DetallePelicula">
         <argument
             android:name="peli"
             app:argType="com.jhostinlh.topeliculas.Modelo.Entitys.Pelicula" />
     </fragment>
     <fragment
         android:id="@+id/listaFavoritos"
-        android:name="com.jhostinlh.topeliculas.VistaFragments.ListaFavoritos.ListaFavoritos"
+        android:name="com.jhostinlh.topeliculas.VistaFragments.ListaFavoritos"
         android:label="@string/label_favoritos"
         tools:layout="@layout/fragment_lista_favoritos">
         <action
@@ -34,7 +34,43 @@
     </fragment>
     <fragment
         android:id="@+id/buscarPeli"
-        android:name="com.jhostinlh.topeliculas.VistaFragments.buscarPeli.BuscarPeli"
+        android:name="com.jhostinlh.topeliculas.VistaFragments.BuscarPeli"
         android:label="@string/label_searchMovie"
         tools:layout="@layout/fragment_buscar_peli" />
+    <fragment
+        android:id="@+id/groupList"
+        android:name="com.jhostinlh.topeliculas.VistaFragments.GroupList"
+        android:label="fragment_group_list"
+        tools:layout="@layout/fragment_group_list" >
+        <action
+            android:id="@+id/action_groupList_to_listPopulate"
+            app:destination="@id/listPopulate" />
+        <action
+            android:id="@+id/action_groupList_to_listTopRated"
+            app:destination="@id/listTopRated" />
+        <action
+            android:id="@+id/action_groupList_to_listLatest"
+            app:destination="@id/listLatest" />
+        <action
+            android:id="@+id/action_groupList_to_detallePelicula"
+            app:destination="@id/detallePelicula" />
+    </fragment>
+    <fragment
+        android:id="@+id/listLatest"
+        android:name="com.jhostinlh.topeliculas.VistaFragments.ListLatest"
+        android:label="fragment_list_latest"
+        tools:layout="@layout/fragment_list_latest" >
+        <action
+            android:id="@+id/action_listLatest_to_detallePelicula"
+            app:destination="@id/detallePelicula" />
+    </fragment>
+    <fragment
+        android:id="@+id/listPopulate"
+        android:name="com.jhostinlh.topeliculas.VistaFragments.ListPopulate"
+        android:label="fragment_list_populate"
+        tools:layout="@layout/fragment_list_populate" >
+        <action
+            android:id="@+id/action_listPopulate_to_detallePelicula"
+            app:destination="@id/detallePelicula" />
+    </fragment>
 </navigation>

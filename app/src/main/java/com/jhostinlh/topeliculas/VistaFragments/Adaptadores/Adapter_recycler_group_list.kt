@@ -1,5 +1,6 @@
 package com.jhostinlh.topeliculas.VistaFragments.Adaptadores
 
+
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
@@ -11,7 +12,8 @@ import com.bumptech.glide.Glide
 import com.jhostinlh.topeliculas.Data
 import com.jhostinlh.topeliculas.Modelo.Entitys.Pelicula
 import com.jhostinlh.topeliculas.R
-import com.jhostinlh.topeliculas.VistaFragments.ListTopRated.ListTopRatedDirections
+import com.jhostinlh.topeliculas.VistaFragments.GroupListDirections
+import com.jhostinlh.topeliculas.VistaFragments.ListTopRatedDirections
 
 class Adapter_recycler_group_list constructor(
     var listImgPortada: List<Pelicula>,
@@ -41,7 +43,7 @@ class Adapter_recycler_group_list constructor(
 
         holder.itemView.setOnClickListener {
             val pelicula = listImgPortada[position]
-            val action = ListTopRatedDirections.actionListTopRatedToDetallePelicula(pelicula)
+            val action = GroupListDirections.actionGroupListToDetallePelicula(pelicula)
 
             if (context != null) {
                 context.findNavController().navigate(action)
@@ -51,13 +53,9 @@ class Adapter_recycler_group_list constructor(
 
 
     class Holder(itemView: View) : RecyclerView.ViewHolder(itemView) {
-        val imgPeli: ImageView = itemView.findViewById(R.id.imageview_item_1)
+        val imgPeli: ImageView = itemView.findViewById(R.id.imageview_group_list)
     }
 
-    fun setFiltro(lista:ArrayList<Pelicula>){
-        this.listImgPortada = listOf()
-        listImgPortada = lista
-        notifyDataSetChanged()
-    }
+
 
 }

@@ -1,20 +1,18 @@
-package com.jhostinlh.topeliculas.VistaFragments.ListTopRated
+package com.jhostinlh.topeliculas.VistaFragments
 
-import android.app.Application
 import android.os.Bundle
 import android.text.Editable
 import android.text.TextWatcher
-import android.util.Log
 import android.view.*
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.activityViewModels
-import androidx.fragment.app.viewModels
 import androidx.lifecycle.Observer
-import androidx.lifecycle.ViewModelProvider
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import com.jhostinlh.topeliculas.Modelo.Entitys.Pelicula
-import com.jhostinlh.topeliculas.VistaFragments.Adaptadores.TopRatedAdapter
+import com.jhostinlh.topeliculas.ViewModel.ShareRepoViewModel
+import com.jhostinlh.topeliculas.ViewModel.ShareRepoViewModelFactory
+import com.jhostinlh.topeliculas.VistaFragments.Adaptadores.ListPeliculasAdapter
 import com.jhostinlh.topeliculas.databinding.FragmentListTopRatedBinding
 import com.jhostinlh.topeliculas.topRatedAplication
 
@@ -32,11 +30,12 @@ class ListTopRated : Fragment() {
     // TODO: Rename and change types of parameters
     private var param1: String? = null
     private var param2: String? = null
-    lateinit var topRatedRecycler: RecyclerView
-    lateinit var recyclerAdapter: TopRatedAdapter
+
+    lateinit var recycler: RecyclerView
+    lateinit var recyclerAdapter: ListPeliculasAdapter
     lateinit var binding: FragmentListTopRatedBinding
-    val viewModel: ListTopRatedViewModel by activityViewModels() {
-        ListTopRatedViewModelFactory((context?.applicationContext as topRatedAplication).repository)
+    val viewModel: ShareRepoViewModel by activityViewModels() {
+        ShareRepoViewModelFactory((context?.applicationContext as topRatedAplication).repository)
     }
 
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -46,8 +45,8 @@ class ListTopRated : Fragment() {
             param2 = it.getString(ARG_PARAM2)
         }
         //viewModel = ViewModelProvider(this).get(ListTopRatedViewModel::class.java)
-        recyclerAdapter = TopRatedAdapter(emptyList(), this,viewModel)
-        viewModel.actualizaTopRated()
+        recyclerAdapter = ListPeliculasAdapter(emptyList(), this,viewModel)
+
     }
 
     override fun onCreateView(
@@ -59,26 +58,18 @@ class ListTopRated : Fragment() {
         binding = FragmentListTopRatedBinding.inflate(inflater,container,false)
 
         setHasOptionsMenu(true)
-        topRatedRecycler = binding.topRatedRecyclerLf
-        topRatedRecycler.layoutManager = LinearLayoutManager(this.context,
+        recycler = binding.topRatedRecyclerLf
+        recycler.layoutManager = LinearLayoutManager(this.context,
             LinearLayoutManager.VERTICAL,false)
+        
 
-        /*
-        viewModel.getTopRated().observe(viewLifecycleOwner, Observer<List<Pelicula>>{ listTopRated ->
-             recyclerAdapter= TopRatedAdapter(listTopRated)
-            topRatedRecycler.adapter = recyclerAdapter
-
-        })
-
-         */
-
-        viewModel.getTopRated().observe(viewLifecycleOwner,object : Observer<List<Pelicula>>{
+        viewModel.getTopRated().observe(viewLifecycleOwner,
+            object : Observer<List<Pelicula>>{
             override fun onChanged(t: List<Pelicula>?) {
-                for (movie in t!!) Log.i("probando",movie.toString())
 
-                recyclerAdapter= TopRatedAdapter(t!!,this@ListTopRated,viewModel)
+                recyclerAdapter= ListPeliculasAdapter(t!!,this@ListTopRated,viewModel)
 
-                topRatedRecycler.adapter = recyclerAdapter
+                recycler.adapter = recyclerAdapter
 
             }
 

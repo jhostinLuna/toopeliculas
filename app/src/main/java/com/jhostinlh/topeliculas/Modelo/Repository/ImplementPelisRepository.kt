@@ -5,19 +5,21 @@ import com.jhostinlh.tiempokotlin.Retrofit.MyApiService
 import com.jhostinlh.topeliculas.Data
 import com.jhostinlh.topeliculas.Modelo.Dao.PelisDao
 import com.jhostinlh.topeliculas.Modelo.Entitys.Pelicula
+import com.jhostinlh.topeliculas.Modelo.Entitys.TopRated
+import com.jhostinlh.topeliculas.Modelo.Entitys.Trailer
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.collect
 import kotlinx.coroutines.launch
 import kotlinx.coroutines.withContext
+import retrofit2.Response
 
 data class ImplementPelisRepository(val pelisDao: PelisDao,val apiService: MyApiService): PelisRepository {
 
 //  Para acceder al Flow con metodo collect
-    var repoTopRated: Flow<List<Pelicula>>? = pelisDao.getAll()
+    //var repoTopRated: Flow<List<Pelicula>>? = pelisDao.getAll()
     val repoFavorite: Flow<List<Pelicula>> = pelisDao.getFavoritos()
-    var listTopRated: List<Pelicula> = listOf()
 
 
     override suspend fun findPeliById(id: Int): Pelicula {
@@ -35,16 +37,17 @@ data class ImplementPelisRepository(val pelisDao: PelisDao,val apiService: MyApi
     override suspend fun insertPeli(peli: Pelicula) {
         pelisDao.insertPeli(peli)
     }
-    suspend fun actualizarTopRated() =
+    suspend fun actualizarTopRated(nameLista:String): TopRated? {
+        return apiService.topRated(nameLista,Data.API_KEY, Data.LENGUAGE)?.execute().body()
 
-            withContext(Dispatchers.IO){
-            val call = apiService?.topRated("top_rated",Data.API_KEY, Data.LENGUAGE)?.execute()
-            val lista = call?.body()?.results
-                if (lista != null) {
-                    listTopRated = lista
-                    for (movie in listTopRated) Log.i("servicio",movie.toString())
-                }
-            }
+    }
+
+
+
+    suspend fun getListTrailers(idPeli: Int): Trailer?{
+        return apiService.getVideos(idPeli,Data.API_KEY,Data.LENGUAGE).execute().body()
+
+    }
 
 
 

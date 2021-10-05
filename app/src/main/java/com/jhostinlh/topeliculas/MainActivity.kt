@@ -24,8 +24,7 @@ import com.google.firebase.analytics.FirebaseAnalytics
 import com.google.firebase.analytics.ktx.analytics
 import com.google.firebase.analytics.ktx.logEvent
 import com.google.firebase.ktx.Firebase
-import com.jhostinlh.topeliculas.VistaFragments.ListTopRated.ListTopRated
-import com.jhostinlh.topeliculas.databinding.ActivityMainBinding
+import com.jhostinlh.topeliculas.VistaFragments.ListTopRated
 
 class MainActivity : AppCompatActivity() {
 

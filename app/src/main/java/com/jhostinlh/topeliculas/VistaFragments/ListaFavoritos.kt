@@ -1,4 +1,4 @@
-package com.jhostinlh.topeliculas.VistaFragments.ListaFavoritos
+package com.jhostinlh.topeliculas.VistaFragments
 
 import android.os.Bundle
 import android.text.Editable
@@ -10,16 +10,12 @@ import android.view.View
 import android.view.ViewGroup
 import androidx.fragment.app.activityViewModels
 import androidx.lifecycle.Observer
-import androidx.lifecycle.ViewModelProvider
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import com.jhostinlh.topeliculas.Modelo.Entitys.Pelicula
-import com.jhostinlh.topeliculas.R
 import com.jhostinlh.topeliculas.VistaFragments.Adaptadores.FavoritosAdapterRecyclerView
-import com.jhostinlh.topeliculas.VistaFragments.ListTopRated.ListTopRatedViewModel
-import com.jhostinlh.topeliculas.VistaFragments.Adaptadores.TopRatedAdapter
-import com.jhostinlh.topeliculas.VistaFragments.ListTopRated.ListTopRatedViewModelFactory
-import com.jhostinlh.topeliculas.databinding.FragmentListTopRatedBinding
+import com.jhostinlh.topeliculas.ViewModel.ShareRepoViewModel
+import com.jhostinlh.topeliculas.ViewModel.ShareRepoViewModelFactory
 import com.jhostinlh.topeliculas.databinding.FragmentListaFavoritosBinding
 import com.jhostinlh.topeliculas.topRatedAplication
 
@@ -39,12 +35,12 @@ class ListaFavoritos : Fragment() {
     private var param2: String? = null
 
     lateinit var topRatedRecycler: RecyclerView
-    val viewModel: ListTopRatedViewModel by activityViewModels() {
-        ListTopRatedViewModelFactory((context?.applicationContext as topRatedAplication).repository)
+    val viewModel: ShareRepoViewModel by activityViewModels() {
+        ShareRepoViewModelFactory((context?.applicationContext as topRatedAplication).repository)
     }
     lateinit var recyclerAdapter: FavoritosAdapterRecyclerView
     lateinit var binding: FragmentListaFavoritosBinding
-    private var num = 0
+
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         arguments?.let {
@@ -52,7 +48,7 @@ class ListaFavoritos : Fragment() {
             param2 = it.getString(ARG_PARAM2)
         }
         //viewModel = ViewModelProvider(this).get(ListaFavoritosViewModel::class.java)
-        Log.i("creado","${num++} veces")
+
     }
 
     override fun onCreateView(

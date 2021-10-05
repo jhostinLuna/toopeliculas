@@ -1,4 +1,4 @@
-package com.jhostinlh.topeliculas.VistaFragments.DetallePelicula
+package com.jhostinlh.topeliculas.VistaFragments
 
 import android.annotation.SuppressLint
 import android.content.ActivityNotFoundException
@@ -8,16 +8,18 @@ import android.os.Bundle
 import android.util.Log
 import android.view.*
 import androidx.fragment.app.Fragment
+import androidx.fragment.app.activityViewModels
 import androidx.lifecycle.Observer
-import androidx.lifecycle.ViewModelProvider
 import androidx.navigation.fragment.navArgs
 import com.bumptech.glide.Glide
 import com.jhostinlh.topeliculas.Data
 import com.jhostinlh.topeliculas.Modelo.Entitys.Pelicula
 import com.jhostinlh.topeliculas.Modelo.Entitys.ResultTrailer
 import com.jhostinlh.topeliculas.R
+import com.jhostinlh.topeliculas.ViewModel.DetallePeliculaViewModel
+import com.jhostinlh.topeliculas.ViewModel.PeliculaViewModelFactory
 import com.jhostinlh.topeliculas.databinding.FragmentDetallePeliculaBinding
-
+import com.jhostinlh.topeliculas.topRatedAplication
 
 
 // TODO: Rename parameter arguments, choose names that match
@@ -35,7 +37,10 @@ class DetallePelicula : Fragment() {
     private var param1: String? = null
     private var param2: String? = null
     lateinit var pelicula: Pelicula
-    lateinit var viewModel: DetallePeliculaViewModel
+    private val safeArgs: DetallePeliculaArgs by navArgs()
+    val viewModel: DetallePeliculaViewModel by activityViewModels() {
+        PeliculaViewModelFactory((context?.applicationContext as topRatedAplication).repository,safeArgs.peli)
+    }
     lateinit var binding: FragmentDetallePeliculaBinding
     @SuppressLint("UseRequireInsteadOfGet")
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -44,13 +49,8 @@ class DetallePelicula : Fragment() {
             param1 = it.getString(ARG_PARAM1)
             param2 = it.getString(ARG_PARAM2)
         }
-        val safeArgs: DetallePeliculaArgs by navArgs()
-        pelicula = safeArgs.peli
-        viewModel = ViewModelProvider(this,
-            PeliculaViewModelFactory(activity!!.application,pelicula)
-        ).get(
-            DetallePeliculaViewModel::class.java)
 
+        pelicula = safeArgs.peli
 
     }
 
@@ -65,7 +65,7 @@ class DetallePelicula : Fragment() {
         // Inflate the layout for this fragment
         Log.i("peli",pelicula.toString())
         viewModel.getListTrailer().observe(viewLifecycleOwner,
-            object : Observer<List<ResultTrailer>>{
+            object : Observer<List<ResultTrailer>> {
                 override fun onChanged(listaTrailers: List<ResultTrailer>?) {
                     if (!listaTrailers.isNullOrEmpty()) {
                         binding.imageViewVerTrailer.setOnClickListener {

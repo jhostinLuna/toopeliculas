@@ -14,16 +14,15 @@ import com.bumptech.glide.Glide
 import com.jhostinlh.topeliculas.Data
 import com.jhostinlh.topeliculas.Modelo.Entitys.Pelicula
 import com.jhostinlh.topeliculas.R
-import com.jhostinlh.topeliculas.VistaFragments.ListTopRated.ListTopRatedViewModel
-import com.jhostinlh.topeliculas.VistaFragments.ListaFavoritos.ListaFavoritosDirections
-import java.util.*
+import com.jhostinlh.topeliculas.ViewModel.ShareRepoViewModel
+import com.jhostinlh.topeliculas.VistaFragments.ListaFavoritosDirections
 import kotlin.collections.ArrayList
 
 
 class FavoritosAdapterRecyclerView constructor(
     var listTopRated: ArrayList<Pelicula>,
     val context: Fragment?,
-    val viewModel: ListTopRatedViewModel
+    val viewModel: ShareRepoViewModel
 ): RecyclerView.Adapter<FavoritosAdapterRecyclerView.Holder>() {
 
 
