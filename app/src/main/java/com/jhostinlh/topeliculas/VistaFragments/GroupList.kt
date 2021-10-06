@@ -6,9 +6,11 @@ import android.util.Log
 import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
 import android.view.View
+import android.view.View.OnClickListener
 import android.view.ViewGroup
 import androidx.fragment.app.activityViewModels
 import androidx.lifecycle.Observer
+import androidx.navigation.fragment.findNavController
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import com.jhostinlh.topeliculas.Modelo.Entitys.Pelicula
@@ -74,7 +76,12 @@ class GroupList : Fragment() {
                     recyclerAdapterTopRated= GroupListRecyclerAdapter(t!!)
 
                     recyclerTopRated.adapter = recyclerAdapterTopRated
+                    recyclerAdapterTopRated.setOnClickListener {view ->
+                        val pelicula = t[recyclerPopular.getChildAdapterPosition(view!!)]!!
+                        val action = GroupListDirections.actionGroupListToDetallePelicula(pelicula)
+                        this@GroupList.findNavController().navigate(action)
 
+                    }
                 }
 
             })
@@ -93,6 +100,12 @@ class GroupList : Fragment() {
                     recyclerAdapterPopular= GroupListRecyclerAdapter(t!!)
 
                     recyclerPopular.adapter = recyclerAdapterPopular
+                    recyclerAdapterPopular.setOnClickListener {view ->
+                        val pelicula = t[recyclerPopular.getChildAdapterPosition(view!!)]!!
+                        val action = GroupListDirections.actionGroupListToDetallePelicula(pelicula)
+                        this@GroupList.findNavController().navigate(action)
+
+                    }
 
                 }
 
@@ -110,10 +123,15 @@ class GroupList : Fragment() {
                     recyclerAdapterLatest= GroupListRecyclerAdapter(t!!)
 
                     recyclerLatest.adapter = recyclerAdapterLatest
-
+                    recyclerAdapterLatest.setOnClickListener { view ->
+                        val pelicula = t[recyclerLatest.getChildAdapterPosition(view!!)]!!
+                        val action = GroupListDirections.actionGroupListToDetallePelicula(pelicula)
+                        this@GroupList.findNavController().navigate(action)
+                    }
                 }
 
             })
+
 
 
         return binding.root

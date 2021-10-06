@@ -11,5 +11,6 @@
     <string name="label_latest">Nuevas</string>
     <string name="label_favoritos">Favoritos</string>
     <string name="label_searchMovie">Buscador</string>
-
+    <string name="label_grouplist">Listas de Peliculas</string>
+    <string name="label_detalle">Detalle y trailer</string>
 </resources>

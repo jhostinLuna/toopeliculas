@@ -18,7 +18,8 @@
     </fragment>
     <fragment
         android:id="@+id/detallePelicula"
-        android:name="com.jhostinlh.topeliculas.VistaFragments.DetallePelicula">
+        android:name="com.jhostinlh.topeliculas.VistaFragments.DetallePelicula"
+        android:label="@string/label_detalle">
         <argument
             android:name="peli"
             app:argType="com.jhostinlh.topeliculas.Modelo.Entitys.Pelicula" />
@@ -40,8 +41,8 @@
     <fragment
         android:id="@+id/groupList"
         android:name="com.jhostinlh.topeliculas.VistaFragments.GroupList"
-        android:label="fragment_group_list"
-        tools:layout="@layout/fragment_group_list" >
+        android:label="@string/label_grouplist"
+        tools:layout="@layout/fragment_group_list">
         <action
             android:id="@+id/action_groupList_to_listPopulate"
             app:destination="@id/listPopulate" />

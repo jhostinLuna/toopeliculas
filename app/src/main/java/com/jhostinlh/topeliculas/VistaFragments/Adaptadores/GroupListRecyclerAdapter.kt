@@ -12,13 +12,14 @@ import com.jhostinlh.topeliculas.R
 
 class GroupListRecyclerAdapter constructor(
     val listPathImgPortadas: List<Pelicula>
-    ): RecyclerView.Adapter<GroupListRecyclerAdapter.Holder>() {
+    ): RecyclerView.Adapter<GroupListRecyclerAdapter.Holder>(),View.OnClickListener {
 
-
+    private lateinit var  listenerOfFragment: View.OnClickListener
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): Holder {
         val view: View = LayoutInflater.from(parent.context)
             .inflate(R.layout.item_group_list, null, false)
+        view.setOnClickListener(this)
         return Holder(view)
     }
 
@@ -28,11 +29,19 @@ class GroupListRecyclerAdapter constructor(
     }
 
     override fun getItemCount(): Int {
-        return 5
+        return 8
     }
+
     class Holder(itemView: View):RecyclerView.ViewHolder(itemView) {
         val portada:ImageView = itemView.findViewById(R.id.imageview_group_list)
 
+    }
+
+    override fun onClick(v: View?) {
+        if (listenerOfFragment!= null) listenerOfFragment.onClick(v)
+    }
+    fun setOnClickListener(listener: View.OnClickListener){
+        listenerOfFragment = listener
     }
 
 }
