@@ -2,8 +2,8 @@ package com.jhostinlh.topeliculas
 
 import android.app.Application
 import com.jhostinlh.tiempokotlin.Retrofit.MyApiAdapter
-import com.jhostinlh.topeliculas.Modelo.Database.AppDataBase
-import com.jhostinlh.topeliculas.Modelo.Repository.ImplementPelisRepository
+import com.jhostinlh.topeliculas.modelo.database.AppDataBase
+import com.jhostinlh.topeliculas.modelo.repository.ImplementPelisRepository
 
 class topRatedAplication: Application() {
     // Using by lazy so the database and the repository are only created when they're needed

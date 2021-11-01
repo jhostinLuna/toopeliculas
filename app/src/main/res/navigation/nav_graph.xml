@@ -6,7 +6,7 @@
     app:startDestination="@id/groupList">
     <fragment
         android:id="@+id/listTopRated"
-        android:name="com.jhostinlh.topeliculas.VistaFragments.ListTopRated"
+        android:name="com.jhostinlh.topeliculas.vistaFragments.ListTopRated"
         android:label="@string/label_topRater"
         tools:layout="@layout/fragment_list_top_rated">
         <action
@@ -18,7 +18,7 @@
     </fragment>
     <fragment
         android:id="@+id/detallePelicula"
-        android:name="com.jhostinlh.topeliculas.VistaFragments.DetallePelicula"
+        android:name="com.jhostinlh.topeliculas.vistaFragments.DetallePelicula"
         android:label="@string/label_detalle">
         <argument
             android:name="peli"
@@ -26,7 +26,7 @@
     </fragment>
     <fragment
         android:id="@+id/listaFavoritos"
-        android:name="com.jhostinlh.topeliculas.VistaFragments.ListaFavoritos"
+        android:name="com.jhostinlh.topeliculas.vistaFragments.ListaFavoritos"
         android:label="@string/label_favoritos"
         tools:layout="@layout/fragment_lista_favoritos">
         <action
@@ -35,12 +35,12 @@
     </fragment>
     <fragment
         android:id="@+id/buscarPeli"
-        android:name="com.jhostinlh.topeliculas.VistaFragments.BuscarPeli"
+        android:name="com.jhostinlh.topeliculas.vistaFragments.BuscarPeli"
         android:label="@string/label_searchMovie"
         tools:layout="@layout/fragment_buscar_peli" />
     <fragment
         android:id="@+id/groupList"
-        android:name="com.jhostinlh.topeliculas.VistaFragments.GroupList"
+        android:name="com.jhostinlh.topeliculas.vistaFragments.GroupList"
         android:label="@string/label_grouplist"
         tools:layout="@layout/fragment_group_list">
         <action
@@ -58,7 +58,7 @@
     </fragment>
     <fragment
         android:id="@+id/listLatest"
-        android:name="com.jhostinlh.topeliculas.VistaFragments.ListLatest"
+        android:name="com.jhostinlh.topeliculas.vistaFragments.ListLatest"
         android:label="fragment_list_latest"
         tools:layout="@layout/fragment_list_latest" >
         <action
@@ -67,7 +67,7 @@
     </fragment>
     <fragment
         android:id="@+id/listPopulate"
-        android:name="com.jhostinlh.topeliculas.VistaFragments.ListPopulate"
+        android:name="com.jhostinlh.topeliculas.vistaFragments.ListPopulate"
         android:label="fragment_list_populate"
         tools:layout="@layout/fragment_list_populate" >
         <action
