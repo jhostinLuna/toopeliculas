@@ -9,12 +9,12 @@ import androidx.fragment.app.activityViewModels
 import androidx.lifecycle.Observer
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
-import com.jhostinlh.topeliculas.modelo.Entitys.Pelicula
 import com.jhostinlh.topeliculas.viewModel.ShareRepoViewModel
 import com.jhostinlh.topeliculas.viewModel.ShareRepoViewModelFactory
 import com.jhostinlh.topeliculas.vistaFragments.adaptadores.ListPeliculasAdapter
 import com.jhostinlh.topeliculas.databinding.FragmentListTopRatedBinding
-import com.jhostinlh.topeliculas.topRatedAplication
+import com.jhostinlh.topeliculas.modelo.retrofit.dataRemote.Movie
+import com.jhostinlh.topeliculas.Aplication
 
 // TODO: Rename parameter arguments, choose names that match
 // the fragment initialization parameters, e.g. ARG_ITEM_NUMBER
@@ -34,8 +34,8 @@ class ListTopRated : Fragment() {
     lateinit var recycler: RecyclerView
     lateinit var recyclerAdapter: ListPeliculasAdapter
     lateinit var binding: FragmentListTopRatedBinding
-    val viewModel: ShareRepoViewModel by activityViewModels() {
-        ShareRepoViewModelFactory((context?.applicationContext as topRatedAplication).repository)
+    val viewModel: ShareRepoViewModel by activityViewModels {
+        ShareRepoViewModelFactory((context?.applicationContext as Aplication).repository)
     }
 
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -57,40 +57,30 @@ class ListTopRated : Fragment() {
 
         binding = FragmentListTopRatedBinding.inflate(inflater,container,false)
 
+        return binding.root
+    }
+
+    override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
+        super.onViewCreated(view, savedInstanceState)
+
         setHasOptionsMenu(true)
         recycler = binding.topRatedRecyclerLf
         recycler.layoutManager = LinearLayoutManager(this.context,
             LinearLayoutManager.VERTICAL,false)
-        
+
 
         viewModel.getTopRated().observe(viewLifecycleOwner,
-            object : Observer<List<Pelicula>>{
-            override fun onChanged(t: List<Pelicula>?) {
+            object : Observer<List<Movie>>{
+                override fun onChanged(t: List<Movie>?) {
 
-                recyclerAdapter= ListPeliculasAdapter(t!!,this@ListTopRated,viewModel)
+                    recyclerAdapter= ListPeliculasAdapter(t!!,this@ListTopRated,viewModel)
 
-                recycler.adapter = recyclerAdapter
+                    recycler.adapter = recyclerAdapter
 
-            }
+                }
 
-        })
-
-        //busqueda
-
-        binding.editTextTitulopeliculaLf
-            .addTextChangedListener(object : TextWatcher {
-            override fun beforeTextChanged(s: CharSequence, start: Int, count: Int, after: Int) {}
-            override fun onTextChanged(s: CharSequence, start: Int, before: Int, count: Int) {
-                recyclerAdapter?.setFiltro(viewModel.listaFiltrada(s.toString()))
-            }
-
-            override fun afterTextChanged(s: Editable) {}
-        })
-
-
-        return binding.root
+            })
     }
-
 /*
     override fun onCreateOptionsMenu(menu: Menu, inflater: MenuInflater) {
         super.onCreateOptionsMenu(menu, inflater)

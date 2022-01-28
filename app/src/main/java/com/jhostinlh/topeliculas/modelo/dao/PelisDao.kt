@@ -1,7 +1,7 @@
 package com.jhostinlh.topeliculas.modelo.dao
 
 import androidx.room.*
-import com.jhostinlh.topeliculas.modelo.Entitys.Pelicula
+import com.jhostinlh.topeliculas.modelo.entitys.Pelicula
 import kotlinx.coroutines.flow.Flow
 
 @Dao
@@ -13,14 +13,15 @@ interface PelisDao {
     fun getAll(): Flow<List<Pelicula>>
 
     @Query("select * from Pelicula where id = :id")
-    suspend fun findPeliById(id: Int): Pelicula
+    fun findPeliById(id: Int): Flow<Pelicula>
 
     @Insert(onConflict = OnConflictStrategy.IGNORE)
-    suspend fun insertPeli(peli: Pelicula)
+    fun insertPeli(peli: Pelicula)
 
     @Update
-    suspend fun updatePeli(peli: Pelicula)
+    fun updatePeli(peli: Pelicula)
 
     @Delete
     fun deletePeli(peli: Pelicula)
+
 }

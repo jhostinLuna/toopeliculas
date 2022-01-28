@@ -1,0 +1,17 @@
+<?xml version="1.0" encoding="utf-8"?>
+<menu xmlns:android="http://schemas.android.com/apk/res/android">
+
+    <item android:title="Listas de Películas">
+        <menu>
+            <item android:id="@+id/listTopRated"
+                android:icon="@drawable/ic_baseline_local_movies_24_movie"
+                android:title="@string/label_topRater" />
+            <item android:id="@+id/listPopulate"
+                android:icon="@drawable/ic_baseline_local_movies_24_movie"
+                android:title="@string/label_populated" />
+            <item android:id="@+id/listLatest"
+                android:icon="@drawable/ic_baseline_local_movies_24_movie"
+                android:title="@string/label_latest" />
+        </menu>
+    </item>
+</menu>

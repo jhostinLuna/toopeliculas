@@ -4,12 +4,10 @@ import android.content.Context
 import androidx.room.Database
 import androidx.room.Room
 import androidx.room.RoomDatabase
-import com.jhostinlh.topeliculas.modelo.dao.DaoTrailers
 import com.jhostinlh.topeliculas.modelo.dao.PelisDao
-import com.jhostinlh.topeliculas.modelo.Entitys.Pelicula
-import com.jhostinlh.topeliculas.modelo.Entitys.ResultTrailer
+import com.jhostinlh.topeliculas.modelo.entitys.Pelicula
 
-@Database(entities = [Pelicula::class,ResultTrailer::class], version = 5, exportSchema = false)
+@Database(entities = [Pelicula::class], version = 8, exportSchema = false)
 abstract class AppDataBase: RoomDatabase() {
     companion object{
         var INSTANCE: AppDataBase? = null
@@ -23,6 +21,5 @@ abstract class AppDataBase: RoomDatabase() {
         }
     }
     abstract fun pelisDao() : PelisDao
-    abstract fun TrailerDao(): DaoTrailers
 
 }

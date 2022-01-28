@@ -9,92 +9,108 @@ import android.util.Log
 import android.view.*
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.activityViewModels
-import androidx.lifecycle.Observer
+import androidx.navigation.fragment.findNavController
 import androidx.navigation.fragment.navArgs
 import com.bumptech.glide.Glide
 import com.jhostinlh.topeliculas.Data
-import com.jhostinlh.topeliculas.modelo.Entitys.Pelicula
-import com.jhostinlh.topeliculas.modelo.Entitys.ResultTrailer
 import com.jhostinlh.topeliculas.R
-import com.jhostinlh.topeliculas.viewModel.DetallePeliculaViewModel
-import com.jhostinlh.topeliculas.viewModel.PeliculaViewModelFactory
 import com.jhostinlh.topeliculas.databinding.FragmentDetallePeliculaBinding
-import com.jhostinlh.topeliculas.topRatedAplication
+import com.jhostinlh.topeliculas.modelo.retrofit.dataRemote.Movie
+import com.jhostinlh.topeliculas.Aplication
+import com.jhostinlh.topeliculas.viewModel.ShareRepoViewModel
+import com.jhostinlh.topeliculas.viewModel.ShareRepoViewModelFactory
+import kotlinx.coroutines.CoroutineScope
+import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.Job
+import kotlinx.coroutines.launch
+import kotlin.coroutines.CoroutineContext
 
 
 // TODO: Rename parameter arguments, choose names that match
-// the fragment initialization parameters, e.g. ARG_ITEM_NUMBER
-private const val ARG_PARAM1 = "param1"
-private const val ARG_PARAM2 = "param2"
+private const val BUNDLE = "movieArgs"
 
 /**
  * A simple [Fragment] subclass.
  * Use the [DetallePelicula.newInstance] factory method to
  * create an instance of this fragment.
  */
-class DetallePelicula : Fragment() {
-    // TODO: Rename and change types of parameters
-    private var param1: String? = null
-    private var param2: String? = null
-    lateinit var pelicula: Pelicula
+class DetallePelicula : Fragment(),CoroutineScope {
+    lateinit var movie:Movie
     private val safeArgs: DetallePeliculaArgs by navArgs()
-    val viewModel: DetallePeliculaViewModel by activityViewModels() {
-        PeliculaViewModelFactory((context?.applicationContext as topRatedAplication).repository,safeArgs.peli)
+    val viewModel: ShareRepoViewModel by activityViewModels {
+        ShareRepoViewModelFactory((context?.applicationContext as Aplication).repository)
     }
     lateinit var binding: FragmentDetallePeliculaBinding
+
+    override val coroutineContext: CoroutineContext
+        get() = Dispatchers.Main
+    private lateinit var job: Job
     @SuppressLint("UseRequireInsteadOfGet")
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-        arguments?.let {
-            param1 = it.getString(ARG_PARAM1)
-            param2 = it.getString(ARG_PARAM2)
-        }
 
-        pelicula = safeArgs.peli
+        setHasOptionsMenu(true)
+        movie = safeArgs.peli
+        job = Job()
+
 
     }
 
+    override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
+        super.onViewCreated(view, savedInstanceState)
+        if (movie != null){
+            Log.i("peli",movie.toString())
+            launch {
+                val trailer = viewModel.loadTrailers(movie.id)
+                if (!trailer.isNullOrEmpty()) {
+                    binding.imageViewVerTrailer.setOnClickListener {
+                        watchYoutubeVideo(trailer.get(0).key)
+                    }
+                    binding.imageViewPlay.setOnClickListener {
+                        watchYoutubeVideo(trailer.get(0).key)
+                    }
+                }else{
+                    binding.imageViewVerTrailer.setImageResource(R.drawable.llorando)
+                    binding.textViewVerTrailer.text = "Lo siento no hemos encontrado ningun trailer disponible."
+                    binding.imageViewPlay.visibility = View.INVISIBLE
+                }
+            }
+
+            binding.txtDescriptionFrDetallepelicula.text = movie.overview
+            binding.txtTrailerFrDetallepelicula.text = movie.title
+            binding.txtIdiomaFrDetallepelicula.text = movie.originalLanguage
+            binding.txtTitleoriginFrDetallepelicula.text = movie.originalTitle
+            binding.txtFechapublicacionFrDetallepelicula.text = movie.releaseDate
+            Glide.with(binding.root).load(Data.URL_BASE_IMG + movie.backdropPath).into(binding.imageViewDetallePelicula)
+
+
+        }else{
+            findNavController().navigateUp()
+        }
+
+    }
+    fun changeFavorito(itemFavorito: MenuItem){
+        when(movie.favorito){
+            true -> {
+                viewModel.remove(movie.toPeliculaEntity())
+                movie.favorito = false
+                itemFavorito.icon = context?.getDrawable(R.drawable.ic_baseline_favorite_24_normal)
+            }
+            false -> {
+                movie.favorito = true
+                viewModel.addFavorito(movie.toPeliculaEntity())
+                itemFavorito.icon = context?.getDrawable(R.drawable.ic_baseline_favorite_24_selected)
+            }
+        }
+    }
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
         savedInstanceState: Bundle?
     ): View? {
         binding = FragmentDetallePeliculaBinding.inflate(inflater,container,false)
-
-        setHasOptionsMenu(true)
-
-        // Inflate the layout for this fragment
-        Log.i("peli",pelicula.toString())
-        viewModel.getListTrailer().observe(viewLifecycleOwner,
-            object : Observer<List<ResultTrailer>> {
-                override fun onChanged(listaTrailers: List<ResultTrailer>?) {
-                    if (!listaTrailers.isNullOrEmpty()) {
-                        binding.imageViewVerTrailer.setOnClickListener {
-                            watchYoutubeVideo(listaTrailers.get(0).key)
-                        }
-                    }else{
-                        binding.imageViewVerTrailer.setImageResource(R.drawable.llorando)
-                        binding.textViewVerTrailer.text = "Lo siento no hemos encontrado ningun trailer disponible."
-                    }
-
-
-                }
-
-            })
-
-
-
-        binding.txtDescriptionFrDetallepelicula!!.text = pelicula.overview
-        binding.txtTrailerFrDetallepelicula!!.text = pelicula.title
-        binding.txtIdiomaFrDetallepelicula!!.text = pelicula.originalLanguage
-        binding.txtTitleoriginFrDetallepelicula!!.text = pelicula.originalTitle
-        binding.txtFechapublicacionFrDetallepelicula!!.text = pelicula.releaseDate
-        Glide.with(binding.root).load(Data.URL_BASE_IMG +pelicula.backdropPath).into(binding.imageViewDetallePelicula)
-
-
         return binding.root
 
     }
-
     fun watchYoutubeVideo(id: String) {
         val appIntent = Intent(Intent.ACTION_VIEW, Uri.parse("vnd.youtube:$id"))
         val webIntent = Intent(
@@ -107,19 +123,24 @@ class DetallePelicula : Fragment() {
             context?.startActivity(webIntent)
         }
     }
-/*
-    override fun onCreateOptionsMenu(menu: Menu, inflater: MenuInflater) {
-        super.onCreateOptionsMenu(menu, inflater)
-        inflater.inflate(com.jhostinlh.topeliculas.R.menu.menu, menu)
+
+    override fun onPrepareOptionsMenu(menu: Menu) {
+        val itemFavorito = menu.findItem(R.id.itemFavorito)
+        itemFavorito.isVisible = true
+        if (movie.favorito){
+            itemFavorito.icon = context?.getDrawable(R.drawable.ic_baseline_favorite_24_selected)
+        }
+
     }
 
     override fun onOptionsItemSelected(item: MenuItem): Boolean {
-        return NavigationUI.
-        onNavDestinationSelected(item,requireView().findNavController())
-                || super.onOptionsItemSelected(item)
+        super.onOptionsItemSelected(item)
+        if (item.itemId == R.id.itemFavorito){
+            changeFavorito(item)
+        }
+        // devuelve si el comportamiento tiene que ser normal(false) o no(true)
+        return false
     }
-
- */
 
     companion object {
         /**
@@ -135,8 +156,6 @@ class DetallePelicula : Fragment() {
         fun newInstance(param1: String, param2: String) =
             DetallePelicula().apply {
                 arguments = Bundle().apply {
-                    putString(ARG_PARAM1, param1)
-                    putString(ARG_PARAM2, param2)
                 }
             }
     }

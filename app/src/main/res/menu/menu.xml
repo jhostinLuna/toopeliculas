@@ -4,27 +4,23 @@
     xmlns:app="http://schemas.android.com/apk/res-auto"
     tools:context=".MainActivity">
 
-    <!--
-    <item
-        android:id="@+id/listTopRated"
-        android:title="icono"
-        android:icon="@drawable/llorando"
-        app:showAsAction="always"
-        android:orderInCategory="0"/>
-    <item
-        android:id="@+id/listaFavoritos"
-        android:title="@string/item_favoritos"
-        android:orderInCategory="2"
-        app:showAsAction="never"/>
 
     <item
-        android:id="@+id/buscarPeli"
+        android:id="@+id/itemFavorito"
+        android:title="@string/item_favoritos"
+        android:icon="@drawable/ic_baseline_favorite_24_normal"
+        android:orderInCategory="2"
+        app:showAsAction="always"
+        android:visible="false"/>
+
+    <item
+        android:id="@+id/buscarPelicula"
         android:title="buscador"
         android:icon="@android:drawable/ic_menu_search"
-        app:showAsAction="always"
+        app:showAsAction="collapseActionView|ifRoom"
         android:orderInCategory="3"
-        app:actionViewClass="androidx.appcompat.widget.SearchView" />
-        -->
+        app:actionViewClass="androidx.appcompat.widget.SearchView"/>
+
 
 
 </menu>

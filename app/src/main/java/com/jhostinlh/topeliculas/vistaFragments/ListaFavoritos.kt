@@ -12,12 +12,12 @@ import androidx.fragment.app.activityViewModels
 import androidx.lifecycle.Observer
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
-import com.jhostinlh.topeliculas.modelo.Entitys.Pelicula
+import com.jhostinlh.topeliculas.modelo.entitys.Pelicula
 import com.jhostinlh.topeliculas.vistaFragments.adaptadores.FavoritosAdapterRecyclerView
 import com.jhostinlh.topeliculas.viewModel.ShareRepoViewModel
 import com.jhostinlh.topeliculas.viewModel.ShareRepoViewModelFactory
 import com.jhostinlh.topeliculas.databinding.FragmentListaFavoritosBinding
-import com.jhostinlh.topeliculas.topRatedAplication
+import com.jhostinlh.topeliculas.Aplication
 
 // TODO: Rename parameter arguments, choose names that match
 // the fragment initialization parameters, e.g. ARG_ITEM_NUMBER
@@ -35,10 +35,10 @@ class ListaFavoritos : Fragment() {
     private var param2: String? = null
 
     lateinit var topRatedRecycler: RecyclerView
-    val viewModel: ShareRepoViewModel by activityViewModels() {
-        ShareRepoViewModelFactory((context?.applicationContext as topRatedAplication).repository)
+    val viewModel: ShareRepoViewModel by activityViewModels {
+        ShareRepoViewModelFactory((context?.applicationContext as Aplication).repository)
     }
-    lateinit var recyclerAdapter: FavoritosAdapterRecyclerView
+    lateinit var favoritosAdapter: FavoritosAdapterRecyclerView
     lateinit var binding: FragmentListaFavoritosBinding
 
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -48,17 +48,23 @@ class ListaFavoritos : Fragment() {
             param2 = it.getString(ARG_PARAM2)
         }
         //viewModel = ViewModelProvider(this).get(ListaFavoritosViewModel::class.java)
+        favoritosAdapter= FavoritosAdapterRecyclerView(emptyList(),context,viewModel)
 
     }
 
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
         savedInstanceState: Bundle?
-    ): View? {
+    ): View {
         // Inflate the layout for this fragment
 // Inflate the layout for this fragment
         binding = FragmentListaFavoritosBinding.inflate(inflater,container,false)
 
+
+        return binding.root
+    }
+
+    override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         setHasOptionsMenu(true)
         topRatedRecycler = binding.topRatedRecyclerLf
         topRatedRecycler.layoutManager = LinearLayoutManager(
@@ -68,41 +74,29 @@ class ListaFavoritos : Fragment() {
         topRatedRecycler.setHasFixedSize(true)
 
         viewModel.getFavorites().observe(viewLifecycleOwner,object : Observer<List<Pelicula>> {
-            override fun onChanged(t: List<Pelicula>?) {
-                recyclerAdapter= FavoritosAdapterRecyclerView(t!! as ArrayList<Pelicula>,this@ListaFavoritos,viewModel)
+            override fun onChanged(t: List<Pelicula>) {
+                favoritosAdapter= FavoritosAdapterRecyclerView(t,context,viewModel)
 
-                Log.i("adaptador","itemCount es: "+recyclerAdapter.itemCount)
+                Log.i("adaptador","itemCount es: "+favoritosAdapter.itemCount)
 
-                topRatedRecycler.adapter = recyclerAdapter
+                topRatedRecycler.adapter = favoritosAdapter
 
 
             }
 
         })
 
-        //busqueda
-
         binding.editTextTitulopeliculaLf
             .addTextChangedListener(object : TextWatcher {
                 override fun beforeTextChanged(s: CharSequence, start: Int, count: Int, after: Int) {}
                 override fun onTextChanged(s: CharSequence, start: Int, before: Int, count: Int) {
-                    recyclerAdapter?.setFiltro(viewModel.listaFiltrada(s.toString()))
+                    favoritosAdapter.setFiltro(viewModel.listaFiltrada(s.toString()))
                 }
 
                 override fun afterTextChanged(s: Editable) {}
             })
 
-
-
-
-
-
-        Log.i("listaPelis","Tiene: "+ (viewModel.getTopRated().value?.get(0)?.backdropPath ?: emptyList<Pelicula>()))
-
-
-
-        return binding.root    }
-
+    }
     companion object {
         /**
          * Use this factory method to create a new instance of

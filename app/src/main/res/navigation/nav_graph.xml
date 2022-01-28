@@ -22,7 +22,7 @@
         android:label="@string/label_detalle">
         <argument
             android:name="peli"
-            app:argType="com.jhostinlh.topeliculas.Modelo.Entitys.Pelicula" />
+            app:argType="com.jhostinlh.topeliculas.modelo.retrofit.dataRemote.Movie" />
     </fragment>
     <fragment
         android:id="@+id/listaFavoritos"
@@ -74,4 +74,7 @@
             android:id="@+id/action_listPopulate_to_detallePelicula"
             app:destination="@id/detallePelicula" />
     </fragment>
+    <action
+        android:id="@+id/action_global_detallePelicula"
+        app:destination="@id/detallePelicula" />
 </navigation>

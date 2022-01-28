@@ -1,16 +1,22 @@
 <resources>
     <string name="app_name">InfoPelis</string>
     <!-- TODO: Remove or change this placeholder text -->
-    <string name="hello_blank_fragment">Hello blank fragment</string>
-    <string name="item_favoritos">Favoritos</string>
-    <string name="app_label">InfoPelis</string>
+    <string name="item_favoritos">favoritos</string>
+    <string name="app_label">InfoPelículas</string>
     <string name="search_hint">spider man</string>
-    <string name="item_buscar">Buscar</string>
+    <string name="item_buscar">buscar</string>
     <string name="label_topRater">Mejor valoradas</string>
     <string name="label_populated">Populares</string>
-    <string name="label_latest">Nuevas</string>
-    <string name="label_favoritos">Favoritos</string>
-    <string name="label_searchMovie">Buscador</string>
-    <string name="label_grouplist">Listas de Peliculas</string>
-    <string name="label_detalle">Detalle y trailer</string>
+    <string name="label_latest">Últimas</string>
+    <string name="label_favoritos">favoritos</string>
+    <string name="label_searchMovie">buscador</string>
+    <string name="label_grouplist">listas de películas</string>
+    <string name="label_detalle">detalle y trailer</string>
+    <!--TODO: fragment group List-->
+    <string name="ver_mas">VER MÁS</string>
+    <string name="openDrawerContentDescRes">Abierto</string>
+    <string name="closeDrawerContentDescRes">Cerrado</string>
+    <!--TODO: ID ADMOB-->
+    <string name="admobId">ca-app-pub-3442988625784485~7333658013</string>
+    <string name="adUnitId">ca-app-pub-3442988625784485/6870385900</string>
 </resources>
