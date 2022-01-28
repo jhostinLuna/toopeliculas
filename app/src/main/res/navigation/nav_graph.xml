@@ -3,12 +3,12 @@
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:id="@+id/nav_graph"
-    app:startDestination="@id/listTopRated">
+    app:startDestination="@id/groupList">
     <fragment
         android:id="@+id/listTopRated"
-        android:name="com.jhostinlh.topeliculas.VistaFragments.ListTopRated.ListTopRated"
-        android:label="fragment_list_top_rated"
-        tools:layout="@layout/fragment_list_top_rated" >
+        android:name="com.jhostinlh.topeliculas.vistaFragments.ListTopRated"
+        android:label="@string/label_topRater"
+        tools:layout="@layout/fragment_list_top_rated">
         <action
             android:id="@+id/action_listTopRated_to_detallePelicula"
             app:destination="@id/detallePelicula" />
@@ -18,18 +18,63 @@
     </fragment>
     <fragment
         android:id="@+id/detallePelicula"
-        android:name="com.jhostinlh.topeliculas.VistaFragments.DetallePelicula.DetallePelicula"
-        android:label="DetallePelicula" >
-        <action
-            android:id="@+id/action_detallePelicula_to_listaFavoritos"
-            app:destination="@id/listaFavoritos" />
+        android:name="com.jhostinlh.topeliculas.vistaFragments.DetallePelicula"
+        android:label="@string/label_detalle">
         <argument
             android:name="peli"
-            app:argType="com.jhostinlh.topeliculas.Modelo.Entitys.Pelicula"/>
+            app:argType="com.jhostinlh.topeliculas.modelo.retrofit.dataRemote.Movie" />
     </fragment>
     <fragment
         android:id="@+id/listaFavoritos"
-        android:name="com.jhostinlh.topeliculas.VistaFragments.ListaFavoritos.ListaFavoritos"
-        android:label="fragment_lista_favoritos"
-        tools:layout="@layout/fragment_lista_favoritos" />
+        android:name="com.jhostinlh.topeliculas.vistaFragments.ListaFavoritos"
+        android:label="@string/label_favoritos"
+        tools:layout="@layout/fragment_lista_favoritos">
+        <action
+            android:id="@+id/action_listaFavoritos_to_detallePelicula"
+            app:destination="@id/detallePelicula" />
+    </fragment>
+    <fragment
+        android:id="@+id/buscarPeli"
+        android:name="com.jhostinlh.topeliculas.vistaFragments.BuscarPeli"
+        android:label="@string/label_searchMovie"
+        tools:layout="@layout/fragment_buscar_peli" />
+    <fragment
+        android:id="@+id/groupList"
+        android:name="com.jhostinlh.topeliculas.vistaFragments.GroupList"
+        android:label="@string/label_grouplist"
+        tools:layout="@layout/fragment_group_list">
+        <action
+            android:id="@+id/action_groupList_to_listPopulate"
+            app:destination="@id/listPopulate" />
+        <action
+            android:id="@+id/action_groupList_to_listTopRated"
+            app:destination="@id/listTopRated" />
+        <action
+            android:id="@+id/action_groupList_to_listLatest"
+            app:destination="@id/listLatest" />
+        <action
+            android:id="@+id/action_groupList_to_detallePelicula"
+            app:destination="@id/detallePelicula" />
+    </fragment>
+    <fragment
+        android:id="@+id/listLatest"
+        android:name="com.jhostinlh.topeliculas.vistaFragments.ListLatest"
+        android:label="fragment_list_latest"
+        tools:layout="@layout/fragment_list_latest" >
+        <action
+            android:id="@+id/action_listLatest_to_detallePelicula"
+            app:destination="@id/detallePelicula" />
+    </fragment>
+    <fragment
+        android:id="@+id/listPopulate"
+        android:name="com.jhostinlh.topeliculas.vistaFragments.ListPopulate"
+        android:label="fragment_list_populate"
+        tools:layout="@layout/fragment_list_populate" >
+        <action
+            android:id="@+id/action_listPopulate_to_detallePelicula"
+            app:destination="@id/detallePelicula" />
+    </fragment>
+    <action
+        android:id="@+id/action_global_detallePelicula"
+        app:destination="@id/detallePelicula" />
 </navigation>

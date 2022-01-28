@@ -1,0 +1,39 @@
+{
+  "project_info": {
+    "project_number": "238568589756",
+    "project_id": "infopeliculas-7a002",
+    "storage_bucket": "infopeliculas-7a002.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:238568589756:android:bd63021ddc6a4f2ecb43b9",
+        "android_client_info": {
+          "package_name": "com.jhostinlh.topeliculas"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "238568589756-86o7q0o10vghcuhaenhhl8ke9u1t3787.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyCyGV8cAhtexm71vxdO8nZ8Ojf5S1snGZM"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "238568589756-86o7q0o10vghcuhaenhhl8ke9u1t3787.apps.googleusercontent.com",
+              "client_type": 3
+            }
+          ]
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}

@@ -3,108 +3,89 @@
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
-    android:layout_height="wrap_content"
+    android:layout_height="200dp"
     android:orientation="vertical"
-    android:paddingTop="5dp"
-    android:paddingBottom="5dp">
-
-    <androidx.constraintlayout.widget.Guideline
-        android:id="@+id/guideline3"
-        android:layout_width="match_parent"
-        android:layout_height="match_parent"
-        android:orientation="vertical"
-        app:layout_constraintGuide_percent=".5" />
+    android:padding="5dp">
 
     <ImageView
         android:id="@+id/img_portada_fr_item_toprated"
-        android:layout_width="0dp"
-        android:layout_height="200dp"
+        android:layout_width="150dp"
+        android:layout_height="180dp"
         app:layout_constraintBottom_toBottomOf="parent"
-        app:layout_constraintEnd_toStartOf="@+id/guideline3"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent"
         tools:src="@tools:sample/avatars" />
 
+
     <TextView
         android:id="@+id/txt_titulo_item_fr_toprated"
         android:layout_width="0dp"
-        android:layout_height="0dp"
-        android:gravity="center"
+        android:layout_height="wrap_content"
         android:text="Título"
-        android:textAlignment="gravity"
+        android:textAlignment="center"
         android:textSize="18sp"
-        app:layout_constraintBottom_toTopOf="@+id/rtingbar_item_fr_top_rated"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintHorizontal_bias="0.0"
-        app:layout_constraintStart_toStartOf="@+id/guideline3"
+        app:layout_constraintStart_toEndOf="@+id/img_portada_fr_item_toprated"
         app:layout_constraintTop_toTopOf="parent" />
 
     <RatingBar
         android:id="@+id/rtingbar_item_fr_top_rated"
-        style="@android:style/Widget.DeviceDefault.Light.RatingBar.Indicator"
+        style="@android:style/Widget.Material.Light.RatingBar.Small"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
+        android:layout_marginStart="24dp"
         android:isIndicator="true"
         android:numStars="5"
         android:rating="2.8"
         android:stepSize="0.2"
-        app:layout_constraintBottom_toBottomOf="@+id/img_portada_fr_item_toprated"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toStartOf="@+id/guideline3"
-        app:layout_constraintTop_toTopOf="@+id/img_portada_fr_item_toprated" />
+        app:layout_constraintBottom_toTopOf="@+id/imageView3"
+        app:layout_constraintStart_toEndOf="@+id/img_portada_fr_item_toprated" />
 
-    <LinearLayout
-        android:id="@+id/linearLayout"
-        android:layout_width="146dp"
-        android:layout_height="25dp"
+    <ImageView
+        android:id="@+id/imageView3"
+        android:layout_width="24dp"
+        android:layout_height="24dp"
         android:layout_marginStart="24dp"
-        android:layout_marginTop="8dp"
-        android:layout_marginEnd="24dp"
-        android:orientation="horizontal"
-        app:layout_constraintBottom_toTopOf="@+id/imageView_whatsapp"
-        app:layout_constraintEnd_toEndOf="parent"
+        android:layout_weight="1"
+        app:layout_constraintBottom_toBottomOf="@+id/img_portada_fr_item_toprated"
         app:layout_constraintStart_toEndOf="@+id/img_portada_fr_item_toprated"
-        app:layout_constraintTop_toBottomOf="@+id/rtingbar_item_fr_top_rated">
+        app:srcCompat="@drawable/voto" />
 
-        <ImageView
-            android:id="@+id/imageView3"
-            android:layout_width="0dp"
-            android:layout_height="match_parent"
-            android:layout_weight="1"
-            app:srcCompat="@drawable/voto" />
-
-        <TextView
-            android:id="@+id/txt_votos_fr_item_toprated"
-            android:layout_width="0dp"
-            android:layout_height="match_parent"
-            android:layout_marginBottom="0dp"
-            android:layout_weight="1"
-            android:text="33" />
-    </LinearLayout>
+    <TextView
+        android:id="@+id/txt_votos_fr_item_toprated"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="8dp"
+        android:layout_weight="1"
+        android:text="33"
+        app:layout_constraintBottom_toBottomOf="@+id/imageView3"
+        app:layout_constraintStart_toEndOf="@+id/imageView3"
+        app:layout_constraintTop_toTopOf="@+id/imageView3" />
 
     <ImageButton
         android:id="@+id/imageButton_favorito_itemtoprated"
-        android:layout_width="41dp"
-        android:layout_height="35dp"
-        android:layout_marginEnd="36dp"
-        android:layout_marginBottom="4dp"
+        android:layout_width="48dp"
+        android:layout_height="48dp"
+        android:layout_marginEnd="24dp"
         android:backgroundTint="#FFFFFF"
         android:textAlignment="viewEnd"
-        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintBottom_toBottomOf="@+id/imageView3"
         app:layout_constraintEnd_toEndOf="parent"
-        app:srcCompat="@drawable/corazonfalse" />
+        app:srcCompat="@drawable/corazonfalse"
+        tools:ignore="SpeakableTextPresentCheck" />
 
-    <ImageView
-        android:id="@+id/imageView_whatsapp"
+    <TextView
+        android:id="@+id/textViewDescription"
         android:layout_width="0dp"
-        android:layout_height="0dp"
+        android:layout_height="wrap_content"
         android:layout_marginTop="8dp"
-        android:layout_marginEnd="24dp"
-        app:layout_constraintBottom_toBottomOf="parent"
-        app:layout_constraintEnd_toStartOf="@+id/imageButton_favorito_itemtoprated"
-        app:layout_constraintHorizontal_bias="0.494"
-        app:layout_constraintStart_toStartOf="@+id/guideline3"
-        app:layout_constraintTop_toBottomOf="@+id/linearLayout"
-        app:srcCompat="@drawable/whatsapp" />
+        android:maxLines="4"
+        android:paddingStart="10dp"
+        app:layout_constraintBottom_toTopOf="@+id/rtingbar_item_fr_top_rated"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toEndOf="@+id/img_portada_fr_item_toprated"
+        app:layout_constraintTop_toBottomOf="@+id/txt_titulo_item_fr_toprated"
+        app:layout_constraintVertical_bias="0.0" />
 
 </androidx.constraintlayout.widget.ConstraintLayout>

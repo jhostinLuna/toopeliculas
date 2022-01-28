@@ -1,116 +1,156 @@
 <?xml version="1.0" encoding="utf-8"?>
-<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<ScrollView xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
-    android:layout_height="match_parent"
-    tools:context="com.jhostinlh.topeliculas.VistaFragments.DetallePelicula.DetallePelicula"
-    android:layout_marginTop="?attr/actionBarSize">
+    android:layout_height="wrap_content">
 
-    <com.pierfrancescosoffritti.androidyoutubeplayer.core.player.views.YouTubePlayerView
-        android:id="@+id/video_trailer_fr_detallepelicula"
-        android:layout_width="wrap_content"
-        android:layout_height="0dp"
-        app:layout_constraintBottom_toTopOf="@+id/guideline4"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="parent"
-        app:showFullScreenButton="true" />
+    <androidx.constraintlayout.widget.ConstraintLayout
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        tools:context="com.jhostinlh.topeliculas.vistaFragments.DetallePelicula">
 
-    <LinearLayout
-        android:layout_width="0dp"
-        android:layout_height="0dp"
-        android:orientation="vertical"
-        android:padding="8dp"
-        app:layout_constraintBottom_toBottomOf="parent"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/video_trailer_fr_detallepelicula">
+        <ImageView
+            android:id="@+id/imageView_detallePelicula"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="8dp"
+            android:layout_marginTop="8dp"
+            android:layout_marginEnd="8dp"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintHorizontal_bias="0.0"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="parent"
+            tools:src="@tools:sample/avatars" />
 
         <TextView
             android:id="@+id/txt_trailer_fr_detallepelicula"
-            android:layout_width="match_parent"
+            android:layout_width="0dp"
             android:layout_height="wrap_content"
-            android:layout_marginTop="10dp"
-            android:layout_marginBottom="10dp"
+            android:layout_marginTop="8dp"
             android:text="titulo"
             android:textAlignment="center"
-            android:textSize="18sp" />
-
-        <TextView
-            android:id="@+id/default_description_fr_detallepelicula"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:text="Descripción:" />
-
-        <TextView
-            android:id="@+id/txt_description_fr_detallepelicula"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:text="Lorem Ipsum is simply dummy text of the printing and typesetting industry. Lorem Ipsum has been the industry's standard dummy text ever since the 1500s, when an unknown printer took a galley of type and scrambled it to make a type specimen book. It has survived not only five centuries, but also the leap into electronic typesetting, remaining essentially unchanged. It was popularised in the 1960s with the release of Letraset sheets containing Lorem Ipsum passages, and more recently with desktop publishing software like Aldus PageMaker including versions of Lorem Ipsum." />
+            android:textSize="20sp"
+            android:textStyle="bold"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@+id/imageView_detallePelicula" />
 
         <LinearLayout
-            android:id="@+id/linearlayout_idioma"
-            android:layout_width="match_parent"
+            android:id="@+id/linearLayout2"
+            android:layout_width="0dp"
             android:layout_height="wrap_content"
-            android:layout_marginBottom="0dp"
-            android:orientation="horizontal">
+            android:layout_marginTop="8dp"
+            android:orientation="vertical"
+            android:padding="8dp"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@+id/txt_trailer_fr_detallepelicula">
 
             <TextView
-                android:id="@+id/default_idioma_fr_detallepelicula"
-                android:layout_width="0dp"
+                android:id="@+id/txt_description_fr_detallepelicula"
+                android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:layout_weight=".5"
-                android:text="Idioma: " />
+                android:text="Lorem Ipsum is simply dummy text of the printing and typesetting industry. Lorem Ipsum has been the industry's standard dummy text ever since the 1500s, when an unknown printer took a galley of type and scrambled it to make a type specimen book. It has survived not only five centuries, but also the leap into electronic typesetting, remaining essentially unchanged. It was popularised in the 1960s with the release of Letraset sheets containing Lorem Ipsum passages, and more recently with desktop publishing software like Aldus PageMaker including versions of Lorem Ipsum."
+                android:textSize="14sp" />
+
+            <LinearLayout
+                android:id="@+id/linearlayout_idioma"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="5dp"
+                android:layout_marginBottom="0dp"
+                android:orientation="horizontal">
+
+                <TextView
+                    android:id="@+id/default_idioma_fr_detallepelicula"
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content"
+                    android:layout_weight=".5"
+                    android:text="Idioma original: "
+                    android:textStyle="bold|italic" />
+
+                <TextView
+                    android:id="@+id/txt_idioma_fr_detallepelicula"
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content"
+                    android:layout_weight="1.5"
+                    android:text="Ingles" />
+            </LinearLayout>
 
             <TextView
-                android:id="@+id/txt_idioma_fr_detallepelicula"
-                android:layout_width="0dp"
+                android:id="@+id/default_titleorigin_fr_detallepelicula"
+                android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:layout_weight="1.5"
-                android:text="Ingles" />
+                android:layout_marginTop="5dp"
+                android:text="Título original:"
+                android:textStyle="bold|italic" />
+
+            <TextView
+                android:id="@+id/txt_titleorigin_fr_detallepelicula"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:text="The Lost World" />
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="5dp"
+                android:orientation="horizontal">
+
+                <TextView
+                    android:id="@+id/default_fechapublicacion_fr_detallepelicula"
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content"
+                    android:layout_weight=".5"
+                    android:text="Estreno: "
+                    android:textStyle="bold|italic" />
+
+                <TextView
+                    android:id="@+id/txt_fechapublicacion_fr_detallepelicula"
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content"
+                    android:layout_weight="1.5"
+                    android:text="02 de Mayo de 2020" />
+
+            </LinearLayout>
+
+            <LinearLayout
+                android:id="@+id/linearLayout_trailerDisponible"
+                android:layout_width="match_parent"
+                android:layout_height="50dp"
+                android:gravity="center"
+                android:orientation="horizontal">
+
+                <TextView
+                    android:id="@+id/textView_verTrailer"
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content"
+                    android:layout_weight="3"
+                    android:text="Ver Trailer disponible....."
+                    android:textAlignment="center"
+                    android:textSize="20sp" />
+
+                <ImageView
+                    android:id="@+id/imageView_verTrailer"
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content"
+                    android:layout_weight="1"
+                    android:src="@drawable/youtube" />
+            </LinearLayout>
+
         </LinearLayout>
 
-        <TextView
-            android:id="@+id/default_titleorigin_fr_detallepelicula"
-            android:layout_width="match_parent"
+        <ImageView
+            android:id="@+id/imageView_play"
+            android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:text="Título original" />
+            android:src="@drawable/ic_baseline_play_circle_outline_24"
+            app:layout_constraintBottom_toBottomOf="@+id/imageView_detallePelicula"
+            app:layout_constraintEnd_toEndOf="@+id/imageView_detallePelicula"
+            app:layout_constraintStart_toStartOf="@+id/imageView_detallePelicula"
+            app:layout_constraintTop_toTopOf="@+id/imageView_detallePelicula" />
 
-        <TextView
-            android:id="@+id/txt_titleorigin_fr_detallepelicula"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:text="The Lost World" />
-
-        <LinearLayout
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:orientation="horizontal">
-
-            <TextView
-                android:id="@+id/default_fechapublicacion_fr_detallepelicula"
-                android:layout_width="0dp"
-                android:layout_height="wrap_content"
-                android:layout_weight=".5"
-                android:text="Estreno: " />
-
-            <TextView
-                android:id="@+id/txt_fechapublicacion_fr_detallepelicula"
-                android:layout_width="0dp"
-                android:layout_height="wrap_content"
-                android:layout_weight="1.5"
-                android:text="02 de Mayo de 2020" />
-
-        </LinearLayout>
-
-    </LinearLayout>
-
-    <androidx.constraintlayout.widget.Guideline
-        android:id="@+id/guideline4"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:orientation="horizontal"
-        app:layout_constraintGuide_percent="0.5" />
-
-</androidx.constraintlayout.widget.ConstraintLayout>
+    </androidx.constraintlayout.widget.ConstraintLayout>
+</ScrollView>
