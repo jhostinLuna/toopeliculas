@@ -8,7 +8,7 @@
     android:padding="5dp">
 
     <ImageView
-        android:id="@+id/img_portada_fr_item_toprated"
+        android:id="@+id/img_portada_fr_item"
         android:layout_width="150dp"
         android:layout_height="180dp"
         app:layout_constraintBottom_toBottomOf="parent"
@@ -18,7 +18,7 @@
 
 
     <TextView
-        android:id="@+id/txt_titulo_item_fr_toprated"
+        android:id="@+id/txt_titulo_item"
         android:layout_width="0dp"
         android:layout_height="wrap_content"
         android:text="Título"
@@ -26,11 +26,11 @@
         android:textSize="18sp"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintHorizontal_bias="0.0"
-        app:layout_constraintStart_toEndOf="@+id/img_portada_fr_item_toprated"
+        app:layout_constraintStart_toEndOf="@+id/img_portada_fr_item"
         app:layout_constraintTop_toTopOf="parent" />
 
     <RatingBar
-        android:id="@+id/rtingbar_item_fr_top_rated"
+        android:id="@+id/rtingbar_item"
         style="@android:style/Widget.Material.Light.RatingBar.Small"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
@@ -39,38 +39,38 @@
         android:numStars="5"
         android:rating="2.8"
         android:stepSize="0.2"
-        app:layout_constraintBottom_toTopOf="@+id/imageView3"
-        app:layout_constraintStart_toEndOf="@+id/img_portada_fr_item_toprated" />
+        app:layout_constraintBottom_toTopOf="@+id/imageViewVotes"
+        app:layout_constraintStart_toEndOf="@+id/img_portada_fr_item" />
 
     <ImageView
-        android:id="@+id/imageView3"
+        android:id="@+id/imageViewVotes"
         android:layout_width="24dp"
         android:layout_height="24dp"
         android:layout_marginStart="24dp"
         android:layout_weight="1"
-        app:layout_constraintBottom_toBottomOf="@+id/img_portada_fr_item_toprated"
-        app:layout_constraintStart_toEndOf="@+id/img_portada_fr_item_toprated"
+        app:layout_constraintBottom_toBottomOf="@+id/img_portada_fr_item"
+        app:layout_constraintStart_toEndOf="@+id/img_portada_fr_item"
         app:srcCompat="@drawable/voto" />
 
     <TextView
-        android:id="@+id/txt_votos_fr_item_toprated"
+        android:id="@+id/txt_votos_fr_item"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_marginStart="8dp"
         android:layout_weight="1"
         android:text="33"
-        app:layout_constraintBottom_toBottomOf="@+id/imageView3"
-        app:layout_constraintStart_toEndOf="@+id/imageView3"
-        app:layout_constraintTop_toTopOf="@+id/imageView3" />
+        app:layout_constraintBottom_toBottomOf="@+id/imageViewVotes"
+        app:layout_constraintStart_toEndOf="@+id/imageViewVotes"
+        app:layout_constraintTop_toTopOf="@+id/imageViewVotes" />
 
     <ImageButton
-        android:id="@+id/imageButton_favorito_itemtoprated"
+        android:id="@+id/imageButton_favorite"
         android:layout_width="48dp"
         android:layout_height="48dp"
         android:layout_marginEnd="24dp"
         android:backgroundTint="#FFFFFF"
         android:textAlignment="viewEnd"
-        app:layout_constraintBottom_toBottomOf="@+id/imageView3"
+        app:layout_constraintBottom_toBottomOf="@+id/imageViewVotes"
         app:layout_constraintEnd_toEndOf="parent"
         app:srcCompat="@drawable/corazonfalse"
         tools:ignore="SpeakableTextPresentCheck" />
@@ -82,10 +82,10 @@
         android:layout_marginTop="8dp"
         android:maxLines="4"
         android:paddingStart="10dp"
-        app:layout_constraintBottom_toTopOf="@+id/rtingbar_item_fr_top_rated"
+        app:layout_constraintBottom_toTopOf="@+id/rtingbar_item"
         app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toEndOf="@+id/img_portada_fr_item_toprated"
-        app:layout_constraintTop_toBottomOf="@+id/txt_titulo_item_fr_toprated"
+        app:layout_constraintStart_toEndOf="@+id/img_portada_fr_item"
+        app:layout_constraintTop_toBottomOf="@+id/txt_titulo_item"
         app:layout_constraintVertical_bias="0.0" />
 
 </androidx.constraintlayout.widget.ConstraintLayout>

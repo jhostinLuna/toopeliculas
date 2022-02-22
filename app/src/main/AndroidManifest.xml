@@ -18,7 +18,7 @@
             android:value="@string/admobId" />
 
         <activity
-            android:name=".MainActivity"
+            android:name=".core.navigation.MainActivity"
             android:windowSoftInputMode="adjustPan"
             android:launchMode="singleInstance">
             <meta-data

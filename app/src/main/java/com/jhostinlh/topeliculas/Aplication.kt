@@ -1,14 +1,20 @@
 package com.jhostinlh.topeliculas
 
 import android.app.Application
-import com.jhostinlh.tiempokotlin.Retrofit.MyApiAdapter
-import com.jhostinlh.topeliculas.modelo.database.AppDataBase
-import com.jhostinlh.topeliculas.modelo.repository.ImplementPelisRepository
+import com.jhostinlh.topeliculas.core.di.*
+import org.koin.android.ext.koin.androidContext
+import org.koin.android.ext.koin.androidLogger
+import org.koin.core.context.startKoin
+import org.koin.core.logger.Level
 
 class Aplication: Application() {
-    // Using by lazy so the database and the repository are only created when they're needed
-    // rather than when the application starts
-    val database by lazy { AppDataBase.getInstance(this) }
-    val apiService by lazy { MyApiAdapter.getApiService() }
-    val repository by lazy { apiService!!.let { ImplementPelisRepository(database.pelisDao(), it) } }
+    override fun onCreate() {
+        super.onCreate()
+        startKoin {
+            androidLogger((Level.ERROR))
+            androidContext(this@Aplication)
+            modules(listOf(networkModule, dataSourceModule, databaseModule, repositoryModule,
+                viewModelModule, favoritesAdapterModule))
+        }
+    }
 }

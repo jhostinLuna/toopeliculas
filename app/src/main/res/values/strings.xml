@@ -1,4 +1,14 @@
 <resources>
+    <string name="failure_server_error">Server Error</string>
+    <string name="Retry">Reintentar</string>
+    <string name="Cancel">Cancelar</string>
+    <string name="generic_error_title">Upsss!</string>
+    <string name="generic_error_body">Parece que tenemos problemas, estamos trabajando para solucionarlo. Por favor, vuelve a intentarlo más tarde.</string>
+
+    <!-- TODO: Remove or change this placeholder text -->
+    <string name="hello_blank_fragment">Hello blank fragment</string>
+    <string name="ver_m_s">Ver más</string>
+
     <string name="app_name">InfoPelis</string>
     <!-- TODO: Remove or change this placeholder text -->
     <string name="item_favoritos">favoritos</string>
@@ -19,4 +29,11 @@
     <!--TODO: ID ADMOB-->
     <string name="admobId">ca-app-pub-3442988625784485~7333658013</string>
     <string name="adUnitId">ca-app-pub-3442988625784485/6870385900</string>
+    <!-- TODO: MESSAGE ERROR-->
+    <string name="error_conection_internet">Parece que no tienes conexion a internet!!</string>
+    <string name="error_server">Parece que estamos teniendo problemas internos por favor vuelve a intentarlo mas tarde</string>
+    <string name="not_found_trailer">Los siento no hemos encontrado trailer en tu idioma..</string>
+    <string name="found_trailer">¡Trailer disponible en YouTube!</string>
+    <string name="not_list_movies">Lista no encontrada</string>
+
 </resources>

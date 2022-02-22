@@ -5,28 +5,16 @@
     android:id="@+id/nav_graph"
     app:startDestination="@id/groupList">
     <fragment
-        android:id="@+id/listTopRated"
-        android:name="com.jhostinlh.topeliculas.vistaFragments.ListTopRated"
-        android:label="@string/label_topRater"
-        tools:layout="@layout/fragment_list_top_rated">
-        <action
-            android:id="@+id/action_listTopRated_to_detallePelicula"
-            app:destination="@id/detallePelicula" />
-        <action
-            android:id="@+id/action_listTopRated_to_listaFavoritos"
-            app:destination="@id/listaFavoritos" />
-    </fragment>
-    <fragment
         android:id="@+id/detallePelicula"
-        android:name="com.jhostinlh.topeliculas.vistaFragments.DetallePelicula"
+        android:name="com.jhostinlh.topeliculas.features.vistaFragments.DetallePelicula"
         android:label="@string/label_detalle">
         <argument
             android:name="peli"
-            app:argType="com.jhostinlh.topeliculas.modelo.retrofit.dataRemote.Movie" />
+            app:argType="com.jhostinlh.topeliculas.features.modelo.retrofit.dataRemote.Movie" />
     </fragment>
     <fragment
         android:id="@+id/listaFavoritos"
-        android:name="com.jhostinlh.topeliculas.vistaFragments.ListaFavoritos"
+        android:name="com.jhostinlh.topeliculas.features.vistaFragments.ListFavoritesFragment"
         android:label="@string/label_favoritos"
         tools:layout="@layout/fragment_lista_favoritos">
         <action
@@ -35,43 +23,28 @@
     </fragment>
     <fragment
         android:id="@+id/buscarPeli"
-        android:name="com.jhostinlh.topeliculas.vistaFragments.BuscarPeli"
+        android:name="com.jhostinlh.topeliculas.features.vistaFragments.BuscarPeli"
         android:label="@string/label_searchMovie"
         tools:layout="@layout/fragment_buscar_peli" />
     <fragment
         android:id="@+id/groupList"
-        android:name="com.jhostinlh.topeliculas.vistaFragments.GroupList"
+        android:name="com.jhostinlh.topeliculas.features.vistaFragments.GroupList"
         android:label="@string/label_grouplist"
         tools:layout="@layout/fragment_group_list">
         <action
-            android:id="@+id/action_groupList_to_listPopulate"
-            app:destination="@id/listPopulate" />
-        <action
-            android:id="@+id/action_groupList_to_listTopRated"
-            app:destination="@id/listTopRated" />
-        <action
             android:id="@+id/action_groupList_to_listLatest"
-            app:destination="@id/listLatest" />
+            app:destination="@id/listMovies" />
         <action
             android:id="@+id/action_groupList_to_detallePelicula"
             app:destination="@id/detallePelicula" />
     </fragment>
     <fragment
-        android:id="@+id/listLatest"
-        android:name="com.jhostinlh.topeliculas.vistaFragments.ListLatest"
-        android:label="fragment_list_latest"
-        tools:layout="@layout/fragment_list_latest" >
+        android:id="@+id/listMovies"
+        android:name="com.jhostinlh.topeliculas.features.vistaFragments.ListMoviesFragment"
+        android:label="fragment_list_movies"
+        tools:layout="@layout/fragment_list_movies">
         <action
             android:id="@+id/action_listLatest_to_detallePelicula"
-            app:destination="@id/detallePelicula" />
-    </fragment>
-    <fragment
-        android:id="@+id/listPopulate"
-        android:name="com.jhostinlh.topeliculas.vistaFragments.ListPopulate"
-        android:label="fragment_list_populate"
-        tools:layout="@layout/fragment_list_populate" >
-        <action
-            android:id="@+id/action_listPopulate_to_detallePelicula"
             app:destination="@id/detallePelicula" />
     </fragment>
     <action

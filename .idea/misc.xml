@@ -3,6 +3,24 @@
   <component name="DesignSurface">
     <option name="filePathToZoomLevelMap">
       <map>
+        <entry key="..\:/Users/Jhostin.Luna/Jhostin/Proyectos/toopeliculas/app/src/main/res/layout-land/fragment_detalle_pelicula.xml" value="0.21516754850088182" />
+        <entry key="..\:/Users/Jhostin.Luna/Jhostin/Proyectos/toopeliculas/app/src/main/res/layout/activity_main.xml" value="0.18802083333333333" />
+        <entry key="..\:/Users/Jhostin.Luna/Jhostin/Proyectos/toopeliculas/app/src/main/res/layout/fragment_buscar_peli.xml" value="0.18802083333333333" />
+        <entry key="..\:/Users/Jhostin.Luna/Jhostin/Proyectos/toopeliculas/app/src/main/res/layout/fragment_detalle_pelicula.xml" value="0.22826086956521738" />
+        <entry key="..\:/Users/Jhostin.Luna/Jhostin/Proyectos/toopeliculas/app/src/main/res/layout/fragment_group_list.xml" value="0.18802083333333333" />
+        <entry key="..\:/Users/Jhostin.Luna/Jhostin/Proyectos/toopeliculas/app/src/main/res/layout/fragment_item.xml" value="0.358695652173913" />
+        <entry key="..\:/Users/Jhostin.Luna/Jhostin/Proyectos/toopeliculas/app/src/main/res/layout/fragment_latest.xml" value="0.1" />
+        <entry key="..\:/Users/Jhostin.Luna/Jhostin/Proyectos/toopeliculas/app/src/main/res/layout/fragment_list_latest.xml" value="0.18802083333333333" />
+        <entry key="..\:/Users/Jhostin.Luna/Jhostin/Proyectos/toopeliculas/app/src/main/res/layout/fragment_list_movies.xml" value="0.14322916666666666" />
+        <entry key="..\:/Users/Jhostin.Luna/Jhostin/Proyectos/toopeliculas/app/src/main/res/layout/fragment_lista_favoritos.xml" value="0.22826086956521738" />
+        <entry key="..\:/Users/Jhostin.Luna/Jhostin/Proyectos/toopeliculas/app/src/main/res/layout/fragment_popular.xml" value="0.1125" />
+        <entry key="..\:/Users/Jhostin.Luna/Jhostin/Proyectos/toopeliculas/app/src/main/res/layout/item_group_list.xml" value="0.22826086956521738" />
+        <entry key="..\:/Users/Jhostin.Luna/Jhostin/Proyectos/toopeliculas/app/src/main/res/layout/nav_hader_nav.xml" value="0.1125" />
+        <entry key="..\:/Users/Jhostin.Luna/Jhostin/Proyectos/toopeliculas/app/src/main/res/layout/partial_list_movies.xml" value="0.14322916666666666" />
+        <entry key="..\:/Users/Jhostin.Luna/Jhostin/Proyectos/toopeliculas/app/src/main/res/layout/toolbar.xml" value="0.1125" />
+        <entry key="..\:/Users/Jhostin.Luna/Jhostin/Proyectos/toopeliculas/app/src/main/res/menu/activity_main_drawer.xml" value="0.1125" />
+        <entry key="..\:/Users/Jhostin.Luna/Jhostin/Proyectos/toopeliculas/app/src/main/res/menu/menu.xml" value="0.1125" />
+        <entry key="..\:/Users/Jhostin.Luna/Jhostin/Proyectos/toopeliculas/app/src/main/res/menu/nav_inf.xml" value="0.1125" />
         <entry key="..\:/Users/lunajhos/AndroidStudioProjects/ToPeliculas/app/src/main/res/drawable-v24/ic_launcher_foreground.xml" value="0.14322916666666666" />
         <entry key="..\:/Users/lunajhos/AndroidStudioProjects/ToPeliculas/app/src/main/res/layout-land/fragment_detalle_pelicula.xml" value="0.2126126126126126" />
         <entry key="..\:/Users/lunajhos/AndroidStudioProjects/ToPeliculas/app/src/main/res/layout/activity_main.xml" value="0.264" />
