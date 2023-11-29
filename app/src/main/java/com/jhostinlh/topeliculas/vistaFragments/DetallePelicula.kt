@@ -17,12 +17,12 @@ import com.jhostinlh.topeliculas.R
 import com.jhostinlh.topeliculas.databinding.FragmentDetallePeliculaBinding
 import com.jhostinlh.topeliculas.modelo.retrofit.dataRemote.Movie
 import com.jhostinlh.topeliculas.Aplication
+import com.jhostinlh.topeliculas.core.platform.BaseFragment
 import com.jhostinlh.topeliculas.viewModel.ShareRepoViewModel
-import com.jhostinlh.topeliculas.viewModel.ShareRepoViewModelFactory
+import dagger.hilt.android.AndroidEntryPoint
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.Job
-import kotlinx.coroutines.launch
 import kotlin.coroutines.CoroutineContext
 
 
@@ -34,40 +34,41 @@ private const val BUNDLE = "movieArgs"
  * Use the [DetallePelicula.newInstance] factory method to
  * create an instance of this fragment.
  */
-class DetallePelicula : Fragment(),CoroutineScope {
+@AndroidEntryPoint
+class DetallePelicula : BaseFragment() {
     lateinit var movie:Movie
     private val safeArgs: DetallePeliculaArgs by navArgs()
-    val viewModel: ShareRepoViewModel by activityViewModels {
-        ShareRepoViewModelFactory((context?.applicationContext as Aplication).repository)
-    }
-    lateinit var binding: FragmentDetallePeliculaBinding
+    val viewModel: ShareRepoViewModel by activityViewModels()
+    private lateinit var binding: FragmentDetallePeliculaBinding
 
-    override val coroutineContext: CoroutineContext
-        get() = Dispatchers.Main
-    private lateinit var job: Job
     @SuppressLint("UseRequireInsteadOfGet")
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
 
         setHasOptionsMenu(true)
         movie = safeArgs.peli
-        job = Job()
 
 
     }
+    override fun onCreateView(
+        inflater: LayoutInflater, container: ViewGroup?,
+        savedInstanceState: Bundle?
+    ): View? {
+        binding = FragmentDetallePeliculaBinding.inflate(inflater,container,false)
+        return binding.root
 
+    }
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
         if (movie != null){
             Log.i("peli",movie.toString())
-            launch {
-                val trailer = viewModel.loadTrailers(movie.id)
-                if (!trailer.isNullOrEmpty()) {
+            viewModel.getListTrailers().observe(viewLifecycleOwner){listResultTrailer->
+                if (!listResultTrailer.isNullOrEmpty()) {
                     binding.imageViewVerTrailer.setOnClickListener {
-                        watchYoutubeVideo(trailer.get(0).key)
+                        watchYoutubeVideo(listResultTrailer.get(0).key)
                     }
                     binding.imageViewPlay.setOnClickListener {
-                        watchYoutubeVideo(trailer.get(0).key)
+                        watchYoutubeVideo(listResultTrailer.get(0).key)
                     }
                 }else{
                     binding.imageViewVerTrailer.setImageResource(R.drawable.llorando)
@@ -75,6 +76,7 @@ class DetallePelicula : Fragment(),CoroutineScope {
                     binding.imageViewPlay.visibility = View.INVISIBLE
                 }
             }
+
 
             binding.txtDescriptionFrDetallepelicula.text = movie.overview
             binding.txtTrailerFrDetallepelicula.text = movie.title
@@ -103,14 +105,7 @@ class DetallePelicula : Fragment(),CoroutineScope {
             }
         }
     }
-    override fun onCreateView(
-        inflater: LayoutInflater, container: ViewGroup?,
-        savedInstanceState: Bundle?
-    ): View? {
-        binding = FragmentDetallePeliculaBinding.inflate(inflater,container,false)
-        return binding.root
 
-    }
     fun watchYoutubeVideo(id: String) {
         val appIntent = Intent(Intent.ACTION_VIEW, Uri.parse("vnd.youtube:$id"))
         val webIntent = Intent(

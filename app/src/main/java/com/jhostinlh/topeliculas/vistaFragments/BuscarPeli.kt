@@ -1,27 +1,21 @@
 package com.jhostinlh.topeliculas.vistaFragments
 
 import android.os.Bundle
-import android.util.Log
 import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
-import android.widget.Toast
 import androidx.fragment.app.activityViewModels
 import androidx.recyclerview.widget.LinearLayoutManager
-import androidx.recyclerview.widget.RecyclerView
-import com.jhostinlh.topeliculas.Aplication
 import com.jhostinlh.topeliculas.R
+import com.jhostinlh.topeliculas.core.platform.BaseFragment
 import com.jhostinlh.topeliculas.databinding.FragmentBuscarPeliBinding
-import com.jhostinlh.topeliculas.databinding.FragmentListLatestBinding
 import com.jhostinlh.topeliculas.modelo.retrofit.dataRemote.Movie
 import com.jhostinlh.topeliculas.viewModel.ShareRepoViewModel
-import com.jhostinlh.topeliculas.viewModel.ShareRepoViewModelFactory
 import com.jhostinlh.topeliculas.vistaFragments.adaptadores.ListPeliculasAdapter
+import dagger.hilt.android.AndroidEntryPoint
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
-import kotlinx.coroutines.Job
-import kotlinx.coroutines.launch
 import kotlin.coroutines.CoroutineContext
 
 // TODO: Rename parameter arguments, choose names that match
@@ -33,35 +27,26 @@ private const val BUNDLE = "query"
  * Use the [BuscarPeli.newInstance] factory method to
  * create an instance of this fragment.
  */
-class BuscarPeli : Fragment(),CoroutineScope {
+@AndroidEntryPoint
+class BuscarPeli : BaseFragment() {
     // TODO: Rename and change types of parameters
-    override val coroutineContext: CoroutineContext
-        get() = Dispatchers.Main
-    private lateinit var job: Job
     private var query: String? = null
-    lateinit var recyclerAdapter: ListPeliculasAdapter
-    lateinit var binding: FragmentBuscarPeliBinding
-    var resultsMovie: List<Movie>? =null
-    val viewModel: ShareRepoViewModel by activityViewModels {
-        ShareRepoViewModelFactory((context?.applicationContext as Aplication).repository)
-    }
+    private lateinit var recyclerAdapter: ListPeliculasAdapter
+    private lateinit var binding: FragmentBuscarPeliBinding
+    val viewModel: ShareRepoViewModel by activityViewModels()
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-
         arguments?.let {
             if (it.containsKey(BUNDLE)){
                 query = it.getString(BUNDLE)
             }
         }
-        job = Job()
-
-
     }
 
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
         savedInstanceState: Bundle?
-    ): View? {
+    ): View {
         // Inflate the layout for this fragment
         binding = FragmentBuscarPeliBinding.inflate(inflater,container,false)
         return binding.root
@@ -72,25 +57,24 @@ class BuscarPeli : Fragment(),CoroutineScope {
         if (query == null){
             binding.textViewMensajeFragmentBuscarPeli.visibility = View.VISIBLE
             return
-        }
-        binding.recyclerViewBuscarPeli.layoutManager = LinearLayoutManager(
-            this.context,
-            LinearLayoutManager.VERTICAL,false)
-        launch {
-            resultsMovie = query?.let { viewModel.buscarPelicula(it) }
-            recyclerAdapter = resultsMovie?.let { ListPeliculasAdapter(filtrarMovie(it),this@BuscarPeli,viewModel) }!!
-            binding.recyclerViewBuscarPeli.adapter = recyclerAdapter
-        }
-    }
-    fun filtrarMovie(lista: List<Movie>): List<Movie>{
-        val listaFiltrada = arrayListOf<Movie>()
-        lista.forEach {
-            if (!it.overview.isNullOrEmpty()){
-                listaFiltrada.add(it)
+        }else {
+            query?.let {
+                viewModel.searchMovie(it)
+            }
+            binding.recyclerViewBuscarPeli.layoutManager = LinearLayoutManager(
+                this.context,
+                LinearLayoutManager.VERTICAL,false)
+            viewModel.getSearchResult().observe(viewLifecycleOwner
+            ) { searchResult ->
+                recyclerAdapter =
+                    ListPeliculasAdapter(searchResult, this@BuscarPeli, viewModel)
+                binding.recyclerViewBuscarPeli.adapter = recyclerAdapter
             }
         }
-        return listaFiltrada.toList()
+
+
     }
+
     companion object {
         /**
          * Use this factory method to create a new instance of
@@ -105,6 +89,7 @@ class BuscarPeli : Fragment(),CoroutineScope {
         fun newInstance(param1: String, param2: String) =
             BuscarPeli().apply {
                 arguments = Bundle().apply {
+                    query = getString(BUNDLE)
                 }
             }
     }

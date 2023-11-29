@@ -13,4 +13,5 @@
     <color name="blue_gray_300">#90A4AE</color>
     <color name="blue_gray_200">#B0BEC5</color>
     <color name="blue_gray_700">#455A64</color>
+    <color name="progressBar">#3f51b5</color>
 </resources>

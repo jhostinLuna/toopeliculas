@@ -11,11 +11,12 @@ import com.jhostinlh.topeliculas.Data
 import com.jhostinlh.topeliculas.modelo.entitys.Pelicula
 import com.jhostinlh.topeliculas.R
 import com.jhostinlh.topeliculas.modelo.retrofit.dataRemote.Movie
+import kotlin.properties.Delegates
 
-class GroupListRecyclerAdapter constructor(
-    val listPathImgPortadas: List<Movie>
-    ): RecyclerView.Adapter<GroupListRecyclerAdapter.Holder>(),View.OnClickListener {
-
+class GroupListRecyclerAdapter :RecyclerView.Adapter<GroupListRecyclerAdapter.Holder>(),View.OnClickListener {
+    internal var collection: List<Movie> by Delegates.observable(emptyList()) {
+            _, _, _ -> notifyDataSetChanged()
+    }
     private lateinit var  listenerOfFragment: View.OnClickListener
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): Holder {
@@ -26,12 +27,12 @@ class GroupListRecyclerAdapter constructor(
     }
 
     override fun onBindViewHolder(holder: Holder, position: Int) {
-        Glide.with(holder.itemView).load(Data.URL_BASE_IMG +listPathImgPortadas[position].posterPath).into(holder.portada)
+        Glide.with(holder.itemView).load(Data.URL_BASE_IMG +collection[position].posterPath).into(holder.portada)
 
     }
 
     override fun getItemCount(): Int {
-        return listPathImgPortadas.size
+        return collection.size
     }
 
     class Holder(itemView: View):RecyclerView.ViewHolder(itemView) {
@@ -40,7 +41,7 @@ class GroupListRecyclerAdapter constructor(
     }
 
     override fun onClick(v: View?) {
-        if (listenerOfFragment!= null) listenerOfFragment.onClick(v)
+        listenerOfFragment.onClick(v)
     }
     fun setOnClickListener(listener: View.OnClickListener){
         listenerOfFragment = listener

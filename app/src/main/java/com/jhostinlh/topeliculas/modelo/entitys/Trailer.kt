@@ -5,7 +5,7 @@ import com.google.gson.annotations.SerializedName
 
 data class Trailer(
     @SerializedName("id")
-    val id: Int,
+    val id: Int = 0,
     @SerializedName("results")
-    val resultTrailers: List<ResultTrailer>
+    val resultTrailers: List<ResultTrailer> = emptyList()
 )

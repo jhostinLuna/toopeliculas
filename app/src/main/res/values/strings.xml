@@ -19,4 +19,12 @@
     <!--TODO: ID ADMOB-->
     <string name="admobId">ca-app-pub-3442988625784485~7333658013</string>
     <string name="adUnitId">ca-app-pub-3442988625784485/6870385900</string>
+
+    <string name="failure_server_error">Server Error</string>
+    <string name="Retry">Reintentar</string>
+    <string name="Cancel">Cancelar</string>
+    <string name="generic_error_title">Upsss!</string>
+    <string name="generic_error_body">Parece que tenemos problemas, estamos trabajando para solucionarlo. Por favor, vuelve a intentarlo más tarde.</string>
+    <string name="cancel">Cancelar</string>
+
 </resources>

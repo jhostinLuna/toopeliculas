@@ -4,51 +4,67 @@ package com.jhostinlh.topeliculas.viewModel
 import android.util.Log
 import androidx.lifecycle.*
 import com.jhostinlh.topeliculas.Data
+import com.jhostinlh.topeliculas.core.platform.BaseViewModel
 import com.jhostinlh.topeliculas.modelo.entitys.Pelicula
 import com.jhostinlh.topeliculas.modelo.entitys.ResultTrailer
-import com.jhostinlh.topeliculas.modelo.repository.ImplementPelisRepository
+import com.jhostinlh.topeliculas.modelo.entitys.Trailer
 import com.jhostinlh.topeliculas.modelo.retrofit.dataRemote.Movie
-import kotlinx.coroutines.Dispatchers
+import com.jhostinlh.topeliculas.modelo.retrofit.dataRemote.ObjMovies
+import com.jhostinlh.topeliculas.vistaFragments.GetListMoviesUseCase
+import com.jhostinlh.topeliculas.vistaFragments.GetSearchMovieUseCase
+import com.jhostinlh.topeliculas.vistaFragments.GetTrailersUseCase
+import com.jhostinlh.topeliculas.vistaFragments.RemoteRepository
+import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.launch
+import javax.inject.Inject
 import kotlin.collections.ArrayList
-
-data class ShareRepoViewModel(val repository: ImplementPelisRepository) : ViewModel() {
+@HiltViewModel
+data class ShareRepoViewModel @Inject constructor(
+    val repository: RemoteRepository,
+    private val getListMoviesUseCase: GetListMoviesUseCase,
+    private val getSearchMovieUseCase: GetSearchMovieUseCase,
+    private val getTrailersUseCase: GetTrailersUseCase
+) : BaseViewModel() {
     //val listTopRated: LiveData<List<Pelicula>> = repository.listTopRated!!.asLiveData()
-    private val listFavorites: LiveData<List<Pelicula>> = repository.repoFavorite.asLiveData()
+    private val listFavorites: LiveData<List<Pelicula>> = repository.getLocalFavorites().asLiveData()
     private val listTopRated: MutableLiveData<List<Movie>> by lazy {
         MutableLiveData<List<Movie>>().also {
-                loadListTopRated(Data.SERVICE_TOP_RATED)
         }
     }
     private val listPopulate: MutableLiveData<List<Movie>> by lazy {
         MutableLiveData<List<Movie>>().also {
-            loadListPopular(Data.SERVICE_POPULATE)
+
         }
     }
     private val listLatest: MutableLiveData<List<Movie>> by lazy {
         MutableLiveData<List<Movie>>().also {
-            loadListLatest(Data.SERVICE_LATEST)
-        }
-    }
-
-    fun loadListPopular(nameLista:String){
-        viewModelScope.launch(Dispatchers.IO) {
-            listPopulate.postValue(repository.getListMovies(nameLista)!!.results)
-        }
-    }
-    fun loadListLatest(nameLista:String){
-        viewModelScope.launch(Dispatchers.IO) {
-            val respuesta =repository.getListMovies(nameLista)!!.results
-            for (movie in respuesta) Log.i("respuesta",movie.toString())
-
-            listLatest.postValue(respuesta)
 
         }
     }
-    fun loadListTopRated(nameLista:String){
-        viewModelScope.launch(Dispatchers.IO) {
-            listTopRated.postValue(repository.getListMovies(nameLista)!!.results)
+
+    private fun handleListPopular(objMovies: ObjMovies) {
+        this.listPopulate.value = objMovies.results
+    }
+    private fun handleListLatest(objMovies: ObjMovies) {
+        this.listLatest.value = objMovies.results
+    }
+    fun loadListPopular() {
+        getListMoviesUseCase.invoke(GetListMoviesUseCase.Params(Data.SERVICE_POPULATE)){
+            it.fold(::handleFailure,::handleListPopular)
         }
+    }
+    fun loadListTopRated(){
+        getListMoviesUseCase.invoke(GetListMoviesUseCase.Params(Data.SERVICE_TOP_RATED)){
+            it.fold(::handleFailure,::handleListTopRated)
+        }
+    }
+    fun loadListLatest() {
+        getListMoviesUseCase.invoke(GetListMoviesUseCase.Params(Data.SERVICE_LATEST)){
+            it.fold(::handleFailure,::handleListLatest)
+        }
+    }
+    private fun handleListTopRated(objMovies: ObjMovies) {
+        this.listTopRated.value = objMovies.results
     }
 
     fun getTopRated(): LiveData<List<Movie>> {
@@ -63,8 +79,23 @@ data class ShareRepoViewModel(val repository: ImplementPelisRepository) : ViewMo
     fun getFavorites(): LiveData<List<Pelicula>> {
         return listFavorites
     }
-    suspend fun buscarPelicula(query:String) = repository.buscarPeli(query)?.results
 
+    private val listResultQuery:MutableLiveData<List<Movie>> = MutableLiveData(emptyList())
+    fun getSearchResult(): LiveData<List<Movie>> {
+        return listResultQuery
+    }
+    fun searchMovie(query:String) {
+        resetListSearchResult()
+        getSearchMovieUseCase.invoke(GetSearchMovieUseCase.Params(query = query)){
+            it.fold(::handleFailure,::handleSearchResult)
+        }
+    }
+    private fun resetListSearchResult(){
+        listResultQuery.value = emptyList()
+    }
+    private fun handleSearchResult(objMovie: ObjMovies){
+        listResultQuery.value = objMovie.results
+    }
     fun listaFiltrada(newText: String?): ArrayList<Pelicula>{
         val listaFiltrada:ArrayList<Pelicula> = arrayListOf<Pelicula>()
         val listaCopy: List<Pelicula>? = listFavorites.value
@@ -107,7 +138,16 @@ data class ShareRepoViewModel(val repository: ImplementPelisRepository) : ViewMo
 
 
     }
-    suspend fun loadTrailers(idPelicula: Int):List<ResultTrailer> = repository.getListTrailers(idPelicula)!!.resultTrailers
-
-
+    private val listTrailer: MutableLiveData<List<ResultTrailer>> = MutableLiveData()
+    fun loadTrailers(idPelicula: Int) {
+        getTrailersUseCase.invoke(GetTrailersUseCase.Params(idPelicula)){
+            it.fold(::handleFailure,::handleTrailersResult)
+        }
+    }
+    private fun handleTrailersResult(trailer: Trailer){
+        listTrailer.value = trailer.resultTrailers
+    }
+    fun getListTrailers():LiveData<List<ResultTrailer>> {
+        return listTrailer
+    }
 }

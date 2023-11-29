@@ -1,11 +1,14 @@
 package com.jhostinlh.topeliculas
 
 import android.app.SearchManager
+import android.content.DialogInterface
 import android.content.Intent
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
+import android.util.Log
 import android.view.Menu
 import android.view.MenuItem
+import androidx.appcompat.app.AlertDialog
 import androidx.appcompat.widget.SearchView
 import androidx.appcompat.widget.Toolbar
 import androidx.drawerlayout.widget.DrawerLayout
@@ -22,19 +25,27 @@ import com.google.firebase.analytics.FirebaseAnalytics
 import com.google.firebase.analytics.ktx.analytics
 import com.google.firebase.analytics.ktx.logEvent
 import com.google.firebase.ktx.Firebase
+import com.jhostinlh.topeliculas.core.functional.DialogCallback
+import com.jhostinlh.topeliculas.core.navigation.PopUpDelegator
+import com.jhostinlh.topeliculas.databinding.ActivityMainBinding
 import com.jhostinlh.topeliculas.vistaFragments.ListTopRated
 import com.jhostinlh.topeliculas.modelo.retrofit.dataRemote.Movie
+import dagger.hilt.android.AndroidEntryPoint
 
-class MainActivity : AppCompatActivity() {
+@AndroidEntryPoint
+class MainActivity : AppCompatActivity(), PopUpDelegator {
 
     private lateinit var mAdView:AdView
     private lateinit var firebaseAnalytics: FirebaseAnalytics
     lateinit var appBarConfiguration:AppBarConfiguration
     private lateinit var toolbar: Toolbar
     private lateinit var navController:NavController
+    private lateinit var binding: ActivityMainBinding
+    private var alertDialog: AlertDialog? = null
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-        setContentView(R.layout.activity_main)
+        binding = ActivityMainBinding.inflate(layoutInflater)
+        setContentView(binding.root)
         handleIntent(intent)
 
         toolbar = findViewById(R.id.my_toolbar)
@@ -143,7 +154,7 @@ class MainActivity : AppCompatActivity() {
         (menu.findItem(R.id.buscarPelicula).actionView as SearchView).apply {
             setSearchableInfo(searchManager.getSearchableInfo(componentName))
         }
-        /*
+
         val searchItem = menu.findItem(R.id.buscarPelicula)
         val searchView = searchItem.actionView as SearchView
         searchView.apply{
@@ -168,7 +179,7 @@ class MainActivity : AppCompatActivity() {
                 }
             })
         }
-         */
+
         return true
     }
 
@@ -192,5 +203,43 @@ class MainActivity : AppCompatActivity() {
         }
     }
 
+    override fun showErrorWithRetry(
+        title: String,
+        message: String,
+        positiveText: String,
+        negativeText: String,
+        callback: DialogCallback
+    ) {
+        alertDialog?.apply {
+            dismiss()
+        }
+        alertDialog = this.let {
+            val builder = AlertDialog.Builder(it)
+            builder.apply {
+                setTitle(title)
+                    setMessage(message)
+                setPositiveButton(positiveText
+                ) { dialog, id ->
+                    callback.onAccept()
+                    dialog.dismiss()
+                }
+                setNegativeButton(negativeText
+                ) { dialog, id ->
+                    callback.onDecline()
+                    dialog.cancel()
+                }
+            }
+            // Set other dialog properties
 
+            // Create the AlertDialog
+            builder.create()
+        }
+
+        alertDialog?.show()
+    }
+
+    override fun progressStatus(viewStatus: Int) {
+        if (binding.progress.visibility != viewStatus)
+            binding.progress.visibility = viewStatus
+    }
 }

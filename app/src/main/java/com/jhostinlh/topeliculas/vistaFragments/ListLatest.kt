@@ -10,11 +10,12 @@ import androidx.lifecycle.Observer
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import com.jhostinlh.topeliculas.viewModel.ShareRepoViewModel
-import com.jhostinlh.topeliculas.viewModel.ShareRepoViewModelFactory
 import com.jhostinlh.topeliculas.vistaFragments.adaptadores.ListPeliculasAdapter
 import com.jhostinlh.topeliculas.databinding.FragmentListLatestBinding
 import com.jhostinlh.topeliculas.modelo.retrofit.dataRemote.Movie
 import com.jhostinlh.topeliculas.Aplication
+import com.jhostinlh.topeliculas.core.platform.BaseFragment
+import dagger.hilt.android.AndroidEntryPoint
 
 // TODO: Rename parameter arguments, choose names that match
 // the fragment initialization parameters, e.g. ARG_ITEM_NUMBER
@@ -26,17 +27,16 @@ private const val ARG_PARAM2 = "param2"
  * Use the [ListLatest.newInstance] factory method to
  * create an instance of this fragment.
  */
-class ListLatest : Fragment() {
+@AndroidEntryPoint
+class ListLatest : BaseFragment() {
     // TODO: Rename and change types of parameters
     private var param1: String? = null
     private var param2: String? = null
 
     lateinit var recycler: RecyclerView
     lateinit var recyclerAdapter: ListPeliculasAdapter
-    lateinit var binding: FragmentListLatestBinding
-    val viewModel: ShareRepoViewModel by activityViewModels {
-        ShareRepoViewModelFactory((context?.applicationContext as Aplication).repository)
-    }
+    private lateinit var binding: FragmentListLatestBinding
+    val viewModel: ShareRepoViewModel by activityViewModels()
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)

@@ -5,18 +5,19 @@ import android.os.Bundle
 import android.view.*
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.activityViewModels
-import androidx.lifecycle.Observer
 import androidx.navigation.findNavController
 import androidx.navigation.fragment.findNavController
 import androidx.recyclerview.widget.LinearLayoutManager
-import androidx.recyclerview.widget.RecyclerView
 import com.jhostinlh.topeliculas.viewModel.ShareRepoViewModel
-import com.jhostinlh.topeliculas.viewModel.ShareRepoViewModelFactory
 import com.jhostinlh.topeliculas.vistaFragments.adaptadores.GroupListRecyclerAdapter
 import com.jhostinlh.topeliculas.databinding.FragmentGroupListBinding
 import com.jhostinlh.topeliculas.modelo.retrofit.dataRemote.Movie
-import com.jhostinlh.topeliculas.Aplication
 import com.jhostinlh.topeliculas.R
+import com.jhostinlh.topeliculas.core.exception.Failure
+import com.jhostinlh.topeliculas.core.extensions.observe
+import com.jhostinlh.topeliculas.core.functional.DialogCallback
+import com.jhostinlh.topeliculas.core.platform.BaseFragment
+import dagger.hilt.android.AndroidEntryPoint
 import java.util.*
 
 // TODO: Rename parameter arguments, choose names that match
@@ -29,31 +30,27 @@ private const val ARG_PARAM2 = "param2"
  * Use the [GroupList.newInstance] factory method to
  * create an instance of this fragment.
  */
-class GroupList : Fragment() {
-    // TODO: Rename and change types of parameters
-    private var param1: String? = null
-    private var param2: String? = null
-    val viewModel: ShareRepoViewModel by activityViewModels {
-        ShareRepoViewModelFactory((context?.applicationContext as Aplication).repository)
-    }
-    lateinit var recyclerTopRated: RecyclerView
-    lateinit var recyclerPopular: RecyclerView
-    lateinit var recyclerLatest: RecyclerView
+@AndroidEntryPoint
+class GroupList : BaseFragment() {
+    val viewModel: ShareRepoViewModel by activityViewModels()
 
-    lateinit var recyclerAdapterTopRated: GroupListRecyclerAdapter
-    lateinit var recyclerAdapterPopular: GroupListRecyclerAdapter
-    lateinit var recyclerAdapterLatest: GroupListRecyclerAdapter
+    private val recyclerAdapterTopRated = GroupListRecyclerAdapter()
+    private val recyclerAdapterPopular = GroupListRecyclerAdapter()
+    private val recyclerAdapterLatest = GroupListRecyclerAdapter()
 
-    lateinit var binding: FragmentGroupListBinding
+    private lateinit var binding: FragmentGroupListBinding
 
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-        arguments?.let {
-            param1 = it.getString(ARG_PARAM1)
-            param2 = it.getString(ARG_PARAM2)
-        }
         setHasOptionsMenu(true)
+        loadListMovies()
+        with(viewModel){
+            observe(getTopRated(),::renderListTopRated)
+            observe(getListPopular(), ::renderListPopular)
+            observe(getListLatest(), :: renderListLatest)
+            observe(failure, :: handleFailure)
+        }
     }
 
     override fun onCreateView(
@@ -69,95 +66,103 @@ class GroupList : Fragment() {
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
         setHasOptionsMenu(true)
+        initializeViews()
+        initListeners()
 
-        recyclerTopRated = binding.recyclerToprated
-        recyclerTopRated.layoutManager = LinearLayoutManager(this.context,
+    }
+    private fun initializeViews() {
+        //Popular
+        binding.recyclerPopular.adapter = recyclerAdapterPopular
+        binding.recyclerPopular.layoutManager= LinearLayoutManager(this.context,
             LinearLayoutManager.HORIZONTAL,false)
-        recyclerTopRated.setHasFixedSize(true)
-        viewModel.getTopRated().observe(viewLifecycleOwner,
-            Observer<List<Movie>> { t ->
-                recyclerAdapterTopRated= GroupListRecyclerAdapter(t!!)
-
-                recyclerTopRated.adapter = recyclerAdapterTopRated
-                recyclerAdapterTopRated.setOnClickListener {view ->
-                    val pelicula = t[recyclerTopRated.getChildAdapterPosition(view)]
-                    val action = GroupListDirections.actionGroupListToDetallePelicula(pelicula)
-                    this@GroupList.findNavController().navigate(action)
-
-                }
-            })
-
-
-
-        recyclerPopular = binding.recyclerPopular
-        recyclerPopular.layoutManager= LinearLayoutManager(this.context,
+        binding.recyclerPopular.setHasFixedSize(true)
+        //TopRated
+        binding.recyclerTopRated.adapter = recyclerAdapterTopRated
+        binding.recyclerTopRated.layoutManager = LinearLayoutManager(this.context,
             LinearLayoutManager.HORIZONTAL,false)
-        recyclerPopular.setHasFixedSize(true)
-
-        viewModel.getListPopular().observe(viewLifecycleOwner,
-            object : Observer<List<Movie>> {
-                override fun onChanged(t: List<Movie>?) {
-
-                    recyclerAdapterPopular= GroupListRecyclerAdapter(t!!)
-
-                    recyclerPopular.adapter = recyclerAdapterPopular
-                    recyclerAdapterPopular.setOnClickListener {view ->
-                        val pelicula = t[recyclerPopular.getChildAdapterPosition(view!!)]
-                        val action = GroupListDirections.actionGroupListToDetallePelicula(pelicula)
-                        this@GroupList.findNavController().navigate(action)
-
-                    }
-
-                }
-
-            })
-
-        recyclerLatest = binding.recyclerLatest
-        recyclerLatest.layoutManager = LinearLayoutManager(this.context,
+        binding.recyclerTopRated.setHasFixedSize(true)
+        /////Latest
+        binding.recyclerLatest.adapter = recyclerAdapterLatest
+        binding.recyclerLatest.layoutManager = LinearLayoutManager(this.context,
             LinearLayoutManager.HORIZONTAL,false)
-        recyclerLatest.setHasFixedSize(true)
+        binding.recyclerLatest.setHasFixedSize(true)
 
-        viewModel.getListLatest().observe(viewLifecycleOwner,
-            object : Observer<List<Movie>> {
-                override fun onChanged(t: List<Movie>?) {
+    }
+    private fun initListeners() {
+        recyclerAdapterPopular.setOnClickListener { view ->
+            val movie = recyclerAdapterPopular.collection[binding.recyclerPopular.getChildAdapterPosition(view)]
+            val action = GroupListDirections.actionGroupListToDetallePelicula(movie)
+            this@GroupList.findNavController().navigate(action)
 
-                    recyclerAdapterLatest= GroupListRecyclerAdapter(t!!)
+        }
+        recyclerAdapterTopRated.setOnClickListener {view->
+            val movie = recyclerAdapterTopRated.collection[binding.recyclerTopRated.getChildAdapterPosition(view)]
+            val action = GroupListDirections.actionGroupListToDetallePelicula(movie)
+            this@GroupList.findNavController().navigate(action)
+        }
+        recyclerAdapterLatest.setOnClickListener { view ->
+            val pelicula = recyclerAdapterLatest.collection[binding.recyclerLatest.getChildAdapterPosition(view)]
+            val action = GroupListDirections.actionGroupListToDetallePelicula(pelicula)
+            this@GroupList.findNavController().navigate(action)
+        }
 
-                    recyclerLatest.adapter = recyclerAdapterLatest
-                    recyclerAdapterLatest.setOnClickListener { view ->
-                        val pelicula = t[recyclerLatest.getChildAdapterPosition(view!!)]
-                        val action = GroupListDirections.actionGroupListToDetallePelicula(pelicula)
-                        this@GroupList.findNavController().navigate(action)
-                    }
-                }
 
-            })
-        binding.textViewMoreLatest.setOnClickListener { view.findNavController().navigate(R.id.listLatest) }
-        binding.textViewMorePopulate.setOnClickListener { view.findNavController().navigate(R.id.listPopulate) }
-        binding.textViewMoreToprated.setOnClickListener { view.findNavController().navigate(R.id.listTopRated) }
+        binding.textViewMoreLatest.setOnClickListener { view?.findNavController()?.navigate(R.id.listLatest) }
+        binding.textViewMorePopulate.setOnClickListener { view?.findNavController()?.navigate(R.id.listPopulate) }
+        binding.textViewMoreToprated.setOnClickListener { view?.findNavController()?.navigate(R.id.listTopRated) }
+
+        recyclerAdapterTopRated.setOnClickListener { view ->
+            val pelicula = recyclerAdapterTopRated.collection[binding.recyclerTopRated.getChildAdapterPosition(view)]
+            val action = GroupListDirections.actionGroupListToDetallePelicula(pelicula)
+            this@GroupList.findNavController().navigate(action)
+        }
+    }
+    private fun loadListMovies() {
+        viewModel.loadListTopRated()
+        viewModel.loadListPopular()
+        viewModel.loadListLatest()
+    }
+    private fun renderListTopRated(listMovies: List<Movie>?) {
+
+        listMovies?.let {
+            recyclerAdapterTopRated.collection = it
+        }
+    }
+    private fun renderListPopular(listMovies: List<Movie>?) {
+
+        listMovies?.let {
+            recyclerAdapterPopular.collection = it
+        }
+    }
+    private fun renderListLatest(listMovies: List<Movie>?) {
+
+        listMovies?.let {
+            recyclerAdapterLatest.collection = it
+        }
+        hideProgress()
     }
 
+    private fun handleFailure(failure: Failure?) {
+        when(failure) {
+            is Failure.CustomError -> renderFailure(failure.errorCode, failure.errorMessage)
+            else -> renderFailure(0, "")
+        }
+    }
+
+    private fun renderFailure(errorCode: Int, errorMessage: String?) {
+        hideProgress()
+        showError(errorCode, errorMessage, object : DialogCallback {
+            override fun onAccept() {
+                loadListMovies()
+            }
+
+            override fun onDecline() {
+                onBackPressed()
+            }
+        })
+    }
     override fun onPrepareOptionsMenu(menu: Menu) {
         val itemFavoritos = menu.findItem(R.id.itemFavorito)
         itemFavoritos.isVisible = false
-    }
-    companion object {
-        /**
-         * Use this factory method to create a new instance of
-         * this fragment using the provided parameters.
-         *
-         * @param param1 Parameter 1.
-         * @param param2 Parameter 2.
-         * @return A new instance of fragment GroupList.
-         */
-        // TODO: Rename and change types and number of parameters
-        @JvmStatic
-        fun newInstance(param1: String, param2: String) =
-            GroupList().apply {
-                arguments = Bundle().apply {
-                    putString(ARG_PARAM1, param1)
-                    putString(ARG_PARAM2, param2)
-                }
-            }
     }
 }
