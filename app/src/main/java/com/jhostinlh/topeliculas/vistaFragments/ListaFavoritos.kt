@@ -3,114 +3,122 @@ package com.jhostinlh.topeliculas.vistaFragments
 import android.os.Bundle
 import android.text.Editable
 import android.text.TextWatcher
-import android.util.Log
 import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
+import android.view.Menu
+import android.view.MenuInflater
+import android.view.MenuItem
 import android.view.View
 import android.view.ViewGroup
+import android.widget.ImageButton
+import androidx.core.view.MenuProvider
 import androidx.fragment.app.activityViewModels
-import androidx.lifecycle.Observer
+import androidx.navigation.findNavController
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
+import com.jhostinlh.topeliculas.R
+import com.jhostinlh.topeliculas.core.exception.Failure
+import com.jhostinlh.topeliculas.core.extensions.observe
+import com.jhostinlh.topeliculas.core.functional.DialogCallback
 import com.jhostinlh.topeliculas.core.platform.BaseFragment
-import com.jhostinlh.topeliculas.modelo.entitys.Pelicula
 import com.jhostinlh.topeliculas.vistaFragments.adaptadores.FavoritosAdapterRecyclerView
 import com.jhostinlh.topeliculas.viewModel.ShareRepoViewModel
 import com.jhostinlh.topeliculas.databinding.FragmentListaFavoritosBinding
+import com.jhostinlh.topeliculas.modelo.entitys.Pelicula
+import com.jhostinlh.topeliculas.modelo.retrofit.dataRemote.Movie
+import com.jhostinlh.topeliculas.viewModel.FavoritesMoviesUseCase
+import com.jhostinlh.topeliculas.vistaFragments.adaptadores.ClickListener
 import dagger.hilt.android.AndroidEntryPoint
+import javax.inject.Inject
 
-// TODO: Rename parameter arguments, choose names that match
-// the fragment initialization parameters, e.g. ARG_ITEM_NUMBER
-private const val ARG_PARAM1 = "param1"
-private const val ARG_PARAM2 = "param2"
 
 /**
  * A simple [Fragment] subclass.
- * Use the [ListaFavoritos.newInstance] factory method to
- * create an instance of this fragment.
  */
 @AndroidEntryPoint
 class ListaFavoritos : BaseFragment() {
-    // TODO: Rename and change types of parameters
-    private var param1: String? = null
-    private var param2: String? = null
 
-    lateinit var topRatedRecycler: RecyclerView
+    private lateinit var topRatedRecycler: RecyclerView
     val viewModel: ShareRepoViewModel by activityViewModels()
-    lateinit var favoritosAdapter: FavoritosAdapterRecyclerView
     private lateinit var binding: FragmentListaFavoritosBinding
-
+    @Inject
+    lateinit var favoritesAdapter: FavoritosAdapterRecyclerView
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-        arguments?.let {
-            param1 = it.getString(ARG_PARAM1)
-            param2 = it.getString(ARG_PARAM2)
+        with(viewModel){
+            observe(getFavorites(),::renderListFavorites)
+            observe(failure,::handleFailure)
         }
-        //viewModel = ViewModelProvider(this).get(ListaFavoritosViewModel::class.java)
-        favoritosAdapter= FavoritosAdapterRecyclerView(emptyList(),context,viewModel)
-
     }
 
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
         savedInstanceState: Bundle?
     ): View {
-        // Inflate the layout for this fragment
-// Inflate the layout for this fragment
         binding = FragmentListaFavoritosBinding.inflate(inflater,container,false)
         return binding.root
     }
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
-        setHasOptionsMenu(true)
+        initializeView()
+        initializeListeners()
+    }
+    private fun initializeView(){
         topRatedRecycler = binding.topRatedRecyclerLf
         topRatedRecycler.layoutManager = LinearLayoutManager(
             this.context,
             LinearLayoutManager.VERTICAL,false)
-
         topRatedRecycler.setHasFixedSize(true)
+        topRatedRecycler.adapter = favoritesAdapter
 
-        viewModel.getFavorites().observe(viewLifecycleOwner,object : Observer<List<Pelicula>> {
-            override fun onChanged(t: List<Pelicula>) {
-                favoritosAdapter= FavoritosAdapterRecyclerView(t,context,viewModel)
-
-                Log.i("adaptador","itemCount es: "+favoritosAdapter.itemCount)
-
-                topRatedRecycler.adapter = favoritosAdapter
-
-
-            }
-
-        })
-
+    }
+    private fun initializeListeners(){
         binding.editTextTitulopeliculaLf
             .addTextChangedListener(object : TextWatcher {
                 override fun beforeTextChanged(s: CharSequence, start: Int, count: Int, after: Int) {}
                 override fun onTextChanged(s: CharSequence, start: Int, before: Int, count: Int) {
-                    favoritosAdapter.setFiltro(viewModel.listaFiltrada(s.toString()))
+                    favoritesAdapter.setFiltro(viewModel.listaFiltrada(s.toString()))
                 }
 
                 override fun afterTextChanged(s: Editable) {}
             })
+        favoritesAdapter.setOnclickListener(object : ClickListener{
+            override fun onItemClick(movie: Movie, view: View) {
+                val action = ListaFavoritosDirections.actionListaFavoritosToDetallePelicula(movie)
+                view.findNavController().navigate(action)
+            }
+
+            override fun onFavoriteIcon(movie: Movie, view: View) {
+                viewModel.operationDbFavorite(FavoritesMoviesUseCase.DELETE,movie.toPeliculaEntity())
+                movie.favorito = false
+                view.findViewById<ImageButton>(R.id.imageButton_favorito_itemtoprated).setImageResource(R.drawable.corazonfalse)
+                val newList = favoritesAdapter.collection.toMutableList()
+                val indexOf = favoritesAdapter.collection.find { it.id == movie.id}
+                newList.remove(indexOf)
+                favoritesAdapter.collection = newList
+            }
+
+        })
+    }
+    private fun renderListFavorites(listMovies: List<Pelicula>?) {
+        listMovies?.let { favoritesAdapter.collection = it }
 
     }
-    companion object {
-        /**
-         * Use this factory method to create a new instance of
-         * this fragment using the provided parameters.
-         *
-         * @param param1 Parameter 1.
-         * @param param2 Parameter 2.
-         * @return A new instance of fragment ListaFavoritos.
-         */
-        // TODO: Rename and change types and number of parameters
-        @JvmStatic
-        fun newInstance(param1: String, param2: String) =
-            ListaFavoritos().apply {
-                arguments = Bundle().apply {
-                    putString(ARG_PARAM1, param1)
-                    putString(ARG_PARAM2, param2)
-                }
+    private fun handleFailure(failure: Failure?) {
+        when(failure) {
+            is Failure.CustomError -> renderFailure(failure.errorCode, failure.errorMessage)
+            else -> renderFailure(0, "")
+        }
+    }
+    private fun renderFailure(errorCode: Int, errorMessage: String?) {
+        hideProgress()
+        showError(errorCode, errorMessage, object : DialogCallback {
+            override fun onAccept() {
             }
+
+            override fun onDecline() {
+                onBackPressed()
+            }
+        })
     }
 }

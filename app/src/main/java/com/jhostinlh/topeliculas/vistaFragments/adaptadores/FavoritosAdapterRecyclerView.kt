@@ -5,70 +5,61 @@ import android.content.Context
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
-import android.widget.*
-import androidx.navigation.findNavController
 import androidx.recyclerview.widget.RecyclerView
 import com.bumptech.glide.Glide
 import com.jhostinlh.topeliculas.Data
 import com.jhostinlh.topeliculas.R
+import com.jhostinlh.topeliculas.databinding.FragmentItemBinding
 import com.jhostinlh.topeliculas.modelo.entitys.Pelicula
 import com.jhostinlh.topeliculas.modelo.retrofit.dataRemote.Movie
-import com.jhostinlh.topeliculas.viewModel.ShareRepoViewModel
-import com.jhostinlh.topeliculas.vistaFragments.ListaFavoritosDirections
+import dagger.hilt.android.qualifiers.ApplicationContext
+import javax.inject.Inject
 import kotlin.collections.ArrayList
+import kotlin.properties.Delegates
 
 
-class FavoritosAdapterRecyclerView(
-    var listTopRated: List<Pelicula>,
-    val context: Context?,
-    val viewModel: ShareRepoViewModel
-): RecyclerView.Adapter<FavoritosAdapterRecyclerView.Holder>() {
-    internal var clickListener: (Movie) -> Unit = { }
-
+class FavoritosAdapterRecyclerView @Inject constructor(
+    @ApplicationContext val context: Context?
+): RecyclerView.Adapter<FavoritosAdapterRecyclerView.Holder>(),View.OnClickListener {
+    private lateinit var customClickListener: ClickListener
+    internal var collection: List<Pelicula> by Delegates.observable(emptyList()) {
+            _, _, _ -> notifyDataSetChanged()
+    }
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): Holder {
-        val view: View = LayoutInflater.from(parent.context)
-            .inflate(R.layout.fragment_item, parent, false)
-        return Holder(view)
+        val binding = FragmentItemBinding.inflate(LayoutInflater.from(parent.context),parent,false)
+        return Holder(binding)
     }
 
 
     override fun getItemCount(): Int {
-        return listTopRated.size
+        return collection.size
     }
 
 
 
     override fun onBindViewHolder(holder: Holder, position: Int) {
 
-        holder.bind(listTopRated.get(position).toMovie(),clickListener,viewModel)
+        holder.bind(collection[position].toMovie(),customClickListener)
 
     }
-    class Holder(itemView: View) : RecyclerView.ViewHolder(itemView) {
-        val txtTitulo: TextView = itemView.findViewById(R.id.txt_titulo_item_fr_toprated)
-        val ratinBar: RatingBar = itemView.findViewById(R.id.rtingbar_item_fr_top_rated)
-        val imgPeli: ImageView = itemView.findViewById(R.id.img_portada_fr_item_toprated)
-        val votos: TextView = itemView.findViewById(R.id.txt_votos_fr_item_toprated)
-        var favorito:ImageButton = itemView.findViewById(R.id.imageButton_favorito_itemtoprated)
-        val description = itemView.findViewById<TextView>(R.id.textViewDescription)
+    class Holder(val binding: FragmentItemBinding) : RecyclerView.ViewHolder(binding.root) {
+
         //val whatsapp: ImageView = itemView.findViewById(R.id.imageView_whatsapp)
 
-        fun bind(listTopRated: Movie,clickListener:((Movie)-> Unit),viewModel: ShareRepoViewModel){
+        fun bind(
+            listTopRated: Movie,
+            customClickListener: ClickListener
+        ){
 
-            itemView.setOnClickListener { clickListener(listTopRated) }
-            txtTitulo.text = listTopRated.title
-            ratinBar.rating = (listTopRated.voteAverage.toFloat() * 5) / 10
-            description.text = listTopRated.overview
+            itemView.setOnClickListener { customClickListener.onItemClick(listTopRated,it) }
+            binding.txtTituloItemFrToprated.text = listTopRated.title
+            binding.rtingbarItemFrTopRated.rating = (listTopRated.voteAverage.toFloat() * 5) / 10
+            binding.textViewDescription.text = listTopRated.overview
             Glide.with(itemView).load(Data.URL_BASE_IMG + listTopRated.posterPath)
-                .into(imgPeli)
-            votos.text = listTopRated.voteCount.toString()
-            if (listTopRated.favorito == true) {
-                favorito.setImageResource(R.drawable.corazontrue)
-            }
-            itemView.setOnClickListener {
-                val action = ListaFavoritosDirections.actionListaFavoritosToDetallePelicula(listTopRated)
-
-                itemView.findNavController().navigate(action)
-            }
+                .into(binding.imgPortadaFrItemToprated)
+            binding.txtVotosFrItemToprated.text = listTopRated.voteCount.toString()
+            binding.imageButtonFavoritoItemtoprated.setImageResource(R.drawable.corazontrue)
+            binding.imageButtonFavoritoItemtoprated.setOnClickListener { customClickListener.onFavoriteIcon(listTopRated,itemView) }
             /*
             // compartir pelicula por whatsapp
             whatsapp.setOnClickListener {
@@ -83,48 +74,26 @@ class FavoritosAdapterRecyclerView(
                 context?.startActivity(shareIntent)
             }
              */
-            favorito.setOnClickListener {
-                when(listTopRated.favorito){
-                    true-> {
-                        listTopRated.favorito = false
-
-                        favorito.setImageResource(R.drawable.corazonfalse)
-                        viewModel.remove(listTopRated.toPeliculaEntity())
-                    }
-                    false->{
-                        listTopRated.favorito = true
-
-                        favorito.setImageResource(R.drawable.corazontrue)
-                        viewModel.addFavorito(listTopRated.toPeliculaEntity())
-                    }
-                }
-            }
-
-
-            /*
-            if (context != null) {
-                Toast.makeText(
-                    context.context,
-                    "position = ${position} -- tamaño de lista: -> " + listTopRated.size,
-                    Toast.LENGTH_LONG
-                ).show()
-            }
-            notifyDataSetChanged()
-            notifyItemRemoved(position)
-
-             */
-
-
-
-
 
         }
 
 
     }
     fun setFiltro(lista:ArrayList<Pelicula>){
-        this.listTopRated = listOf()
-        listTopRated = lista
+        this.collection = listOf()
+        collection = lista
         notifyDataSetChanged()
     }
+
+    override fun onClick(p0: View?) {
+        TODO("Not yet implemented")
+    }
+    fun setOnclickListener(clickListener: ClickListener){
+        customClickListener = clickListener
+    }
+
+}
+interface ClickListener {
+    fun onItemClick(movie: Movie,view: View)
+    fun onFavoriteIcon(movie: Movie, view: View)
 }

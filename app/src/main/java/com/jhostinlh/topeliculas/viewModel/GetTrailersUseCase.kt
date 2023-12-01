@@ -1,14 +1,15 @@
-package com.jhostinlh.topeliculas.vistaFragments
+package com.jhostinlh.topeliculas.viewModel
 
 import com.jhostinlh.topeliculas.core.exception.Failure
 import com.jhostinlh.topeliculas.core.functional.Either
 import com.jhostinlh.topeliculas.core.interactor.UseCase
 import com.jhostinlh.topeliculas.modelo.entitys.Trailer
+import com.jhostinlh.topeliculas.vistaFragments.RemoteRepository
 import javax.inject.Inject
 
 class GetTrailersUseCase @Inject constructor(
     private val remoteRepository: RemoteRepository
-):UseCase<Trailer,GetTrailersUseCase.Params>() {
+):UseCase<Trailer, GetTrailersUseCase.Params>() {
     class Params(
         val idMovie: Int
     )

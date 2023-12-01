@@ -26,5 +26,7 @@
     <string name="generic_error_title">Upsss!</string>
     <string name="generic_error_body">Parece que tenemos problemas, estamos trabajando para solucionarlo. Por favor, vuelve a intentarlo más tarde.</string>
     <string name="cancel">Cancelar</string>
+    <string name="not_video">\"Lo siento no hemos encontrado ningun trailer disponible.\"</string>
+    <string name="image_drawer_description">Image de una camara de cine</string>
 
 </resources>

@@ -1,7 +1,6 @@
 package com.jhostinlh.topeliculas.viewModel
 
 
-import android.util.Log
 import androidx.lifecycle.*
 import com.jhostinlh.topeliculas.Data
 import com.jhostinlh.topeliculas.core.platform.BaseViewModel
@@ -10,38 +9,40 @@ import com.jhostinlh.topeliculas.modelo.entitys.ResultTrailer
 import com.jhostinlh.topeliculas.modelo.entitys.Trailer
 import com.jhostinlh.topeliculas.modelo.retrofit.dataRemote.Movie
 import com.jhostinlh.topeliculas.modelo.retrofit.dataRemote.ObjMovies
-import com.jhostinlh.topeliculas.vistaFragments.GetListMoviesUseCase
-import com.jhostinlh.topeliculas.vistaFragments.GetSearchMovieUseCase
-import com.jhostinlh.topeliculas.vistaFragments.GetTrailersUseCase
-import com.jhostinlh.topeliculas.vistaFragments.RemoteRepository
 import dagger.hilt.android.lifecycle.HiltViewModel
-import kotlinx.coroutines.launch
+import kotlinx.coroutines.flow.Flow
 import javax.inject.Inject
 import kotlin.collections.ArrayList
 @HiltViewModel
 data class ShareRepoViewModel @Inject constructor(
-    val repository: RemoteRepository,
+    private val getFavoritesMoviesUseCase: GetFavoritesMoviesUseCase,
+    private val favoritesMoviesUseCase: FavoritesMoviesUseCase,
     private val getListMoviesUseCase: GetListMoviesUseCase,
     private val getSearchMovieUseCase: GetSearchMovieUseCase,
     private val getTrailersUseCase: GetTrailersUseCase
 ) : BaseViewModel() {
     //val listTopRated: LiveData<List<Pelicula>> = repository.listTopRated!!.asLiveData()
-    private val listFavorites: LiveData<List<Pelicula>> = repository.getLocalFavorites().asLiveData()
+    init {
+        loadFavorites()
+    }
+    private lateinit var listFavorites: LiveData<List<Pelicula>>
     private val listTopRated: MutableLiveData<List<Movie>> by lazy {
-        MutableLiveData<List<Movie>>().also {
-        }
+        MutableLiveData<List<Movie>>()
     }
     private val listPopulate: MutableLiveData<List<Movie>> by lazy {
-        MutableLiveData<List<Movie>>().also {
-
-        }
+        MutableLiveData<List<Movie>>()
     }
     private val listLatest: MutableLiveData<List<Movie>> by lazy {
-        MutableLiveData<List<Movie>>().also {
-
+        MutableLiveData<List<Movie>>()
+    }
+    private fun loadFavorites(){
+        getFavoritesMoviesUseCase.invoke(GetFavoritesMoviesUseCase.Params()) {
+            it.fold(::handleFailure, ::handleListFavorites)
         }
     }
-
+    private fun handleListFavorites(listFavorites: Flow<List<Pelicula>>) {
+        this.listFavorites = listFavorites.asLiveData()
+    }
     private fun handleListPopular(objMovies: ObjMovies) {
         this.listPopulate.value = objMovies.results
     }
@@ -110,34 +111,17 @@ data class ShareRepoViewModel @Inject constructor(
 
         return listaFiltrada
     }
-
-
-
-    fun addFavorito(peli: Pelicula){
-        viewModelScope.launch {
-            try {
-                repository.insertPeli(peli)
-            }catch (e:Exception){
-                Log.d("borrar",e.message+"--"+e.printStackTrace())
-
-            }
-
+    fun operationDbFavorite(operation: String, pelicula: Pelicula){
+        favoritesMoviesUseCase.invoke(
+            FavoritesMoviesUseCase.Params(
+            operation = operation, favoriteMovie = pelicula
+        )){
+            it.fold(::handleFailure,::handleOperationDbFavorite)
         }
     }
-    fun remove(peli: Pelicula){
-        viewModelScope.launch{
-            try {
-                repository.deletePeli(peli)
-            }catch (e:Exception){
-                Log.d("borrar",e.message+"--"+e.printStackTrace())
-
-            }
+    private fun handleOperationDbFavorite(unit: Unit) {}
 
 
-        }
-
-
-    }
     private val listTrailer: MutableLiveData<List<ResultTrailer>> = MutableLiveData()
     fun loadTrailers(idPelicula: Int) {
         getTrailersUseCase.invoke(GetTrailersUseCase.Params(idPelicula)){

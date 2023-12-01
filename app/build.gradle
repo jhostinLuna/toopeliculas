@@ -106,10 +106,9 @@ dependencies {
     // When using the BoM, you don't specify versions in Firebase library dependencies
     implementation 'com.google.firebase:firebase-messaging-ktx'
 
-    //ADMOB Anuncios Google
-    implementation 'com.google.android.gms:play-services-ads:20.5.0'
     def hiltVersion = "2.44"
     //Hilt
     implementation "com.google.dagger:hilt-android:$hiltVersion"
     kapt "com.google.dagger:hilt-android-compiler:$hiltVersion"
+    implementation "com.google.android.material:material:1.6.0"
 }

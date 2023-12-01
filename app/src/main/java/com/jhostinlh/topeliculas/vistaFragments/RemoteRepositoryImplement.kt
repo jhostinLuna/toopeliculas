@@ -1,6 +1,5 @@
 package com.jhostinlh.topeliculas.vistaFragments
 
-import com.jhostinlh.topeliculas.Data
 import com.jhostinlh.topeliculas.modelo.retrofit.MyApiService
 import com.jhostinlh.topeliculas.modelo.entitys.Trailer
 import com.jhostinlh.topeliculas.core.exception.Failure
@@ -11,6 +10,7 @@ import com.jhostinlh.topeliculas.modelo.dao.PelisDao
 import com.jhostinlh.topeliculas.modelo.entitys.Pelicula
 import com.jhostinlh.topeliculas.modelo.retrofit.dataRemote.ObjMovies
 import kotlinx.coroutines.flow.Flow
+import java.lang.Exception
 import javax.inject.Inject
 
 class RemoteRepositoryImplement @Inject constructor(
@@ -27,7 +27,7 @@ class RemoteRepositoryImplement @Inject constructor(
                 },
                 ObjMovies()
             )
-            false, null -> Either.Left(Failure.NetworkConnection())
+            false -> Either.Left(Failure.NetworkConnection())
         }
     }
 
@@ -40,7 +40,7 @@ class RemoteRepositoryImplement @Inject constructor(
                 },
                 ObjMovies()
             )
-            false, null -> Either.Left(Failure.NetworkConnection())
+            false -> Either.Left(Failure.NetworkConnection())
         }
     }
 
@@ -53,7 +53,7 @@ class RemoteRepositoryImplement @Inject constructor(
                 },
                 Trailer()
             )
-            false, null -> Either.Left(Failure.NetworkConnection())
+            false -> Either.Left(Failure.NetworkConnection())
 
         }
     }
@@ -70,13 +70,33 @@ class RemoteRepositoryImplement @Inject constructor(
         pelisDao.findPeliById(id)
 
 
-    override fun updatePeli(peli: Pelicula) =
-        pelisDao.updatePeli(peli)
+    override fun updatePeli(peli: Pelicula): Either<Failure,Unit> {
+        return try {
+            val response = pelisDao.updatePeli(peli)
+            Either.Right(response)
+        }catch (e: Exception) {
+            Either.Left(Failure.CustomError(-1,e.message))
+        }
+    }
 
-    override fun deletePeli(peli: Pelicula) =
-        pelisDao.deletePeli(peli)
+    override fun deletePeli(peli: Pelicula): Either<Failure,Unit> {
+        return try {
+            val response = pelisDao.deletePeli(peli)
+            Either.Right(response)
+        }catch (e: Exception) {
+            Either.Left(Failure.CustomError(-1,e.message))
+        }
 
-    override fun insertPeli(peli: Pelicula) =
-        pelisDao.insertPeli(peli)
+    }
+
+    override fun insertPeli(peli: Pelicula): Either<Failure,Unit> {
+        return try {
+            val response = pelisDao.insertPeli(peli)
+            Either.Right(response)
+        }catch (e: Exception) {
+            Either.Left(Failure.CustomError(-1,e.message))
+        }
+
+    }
 
 }
