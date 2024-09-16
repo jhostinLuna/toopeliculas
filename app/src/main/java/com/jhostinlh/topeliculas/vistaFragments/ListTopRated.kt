@@ -67,17 +67,12 @@ class ListTopRated : BaseFragment() {
             LinearLayoutManager.VERTICAL,false)
 
 
-        viewModel.getTopRated().observe(viewLifecycleOwner,
-            object : Observer<List<Movie>>{
-                override fun onChanged(t: List<Movie>?) {
+        viewModel.getTopRated().observe(viewLifecycleOwner
+        ) { value ->
+            recyclerAdapter = ListPeliculasAdapter(value, this@ListTopRated, viewModel)
 
-                    recyclerAdapter= ListPeliculasAdapter(t!!,this@ListTopRated,viewModel)
-
-                    recycler.adapter = recyclerAdapter
-
-                }
-
-            })
+            recycler.adapter = recyclerAdapter
+        }
     }
 /*
     override fun onCreateOptionsMenu(menu: Menu, inflater: MenuInflater) {

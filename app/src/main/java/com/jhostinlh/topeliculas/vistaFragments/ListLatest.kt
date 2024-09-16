@@ -67,17 +67,12 @@ class ListLatest : BaseFragment() {
             LinearLayoutManager.VERTICAL,false)
 
 
-        viewModel.getListLatest().observe(viewLifecycleOwner,
-            object : Observer<List<Movie>>{
-                override fun onChanged(t: List<Movie>?) {
+        viewModel.getListLatest().observe(viewLifecycleOwner
+        ) { value ->
+            recyclerAdapter = ListPeliculasAdapter(value, this@ListLatest, viewModel)
 
-                    recyclerAdapter= ListPeliculasAdapter(t!!,this@ListLatest,viewModel)
-
-                    recycler.adapter = recyclerAdapter
-
-                }
-
-            })
+            recycler.adapter = recyclerAdapter
+        }
 
 
     }

@@ -13,7 +13,6 @@ import com.jhostinlh.topeliculas.viewModel.ShareRepoViewModel
 import com.jhostinlh.topeliculas.vistaFragments.adaptadores.ListPeliculasAdapter
 import com.jhostinlh.topeliculas.databinding.FragmentListPopulateBinding
 import com.jhostinlh.topeliculas.modelo.retrofit.dataRemote.Movie
-import com.jhostinlh.topeliculas.Aplication
 import com.jhostinlh.topeliculas.core.platform.BaseFragment
 import dagger.hilt.android.AndroidEntryPoint
 
@@ -24,7 +23,6 @@ private const val ARG_PARAM2 = "param2"
 
 /**
  * A simple [Fragment] subclass.
- * Use the [ListPopulate.newInstance] factory method to
  * create an instance of this fragment.
  */
 @AndroidEntryPoint
@@ -67,17 +65,12 @@ class ListPopulate : BaseFragment() {
             LinearLayoutManager.VERTICAL,false)
 
 
-        viewModel.getListPopular().observe(viewLifecycleOwner,
-            object : Observer<List<Movie>> {
-                override fun onChanged(t: List<Movie>?) {
+        viewModel.getListPopular().observe(viewLifecycleOwner
+        ) { value ->
+            recyclerAdapter = ListPeliculasAdapter(value, this@ListPopulate, viewModel)
 
-                    recyclerAdapter= ListPeliculasAdapter(t!!,this@ListPopulate,viewModel)
-
-                    recycler.adapter = recyclerAdapter
-
-                }
-
-            })
+            recycler.adapter = recyclerAdapter
+        }
 
 
     }
