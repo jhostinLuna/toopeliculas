@@ -16,9 +16,6 @@
     <string name="ver_mas">VER MÁS</string>
     <string name="openDrawerContentDescRes">Abierto</string>
     <string name="closeDrawerContentDescRes">Cerrado</string>
-    <!--TODO: ID ADMOB-->
-    <string name="admobId">ca-app-pub-3442988625784485~7333658013</string>
-    <string name="adUnitId">ca-app-pub-3442988625784485/6870385900</string>
 
     <string name="failure_server_error">Server Error</string>
     <string name="Retry">Reintentar</string>

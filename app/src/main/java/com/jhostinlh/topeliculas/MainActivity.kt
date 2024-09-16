@@ -27,7 +27,7 @@ import dagger.hilt.android.AndroidEntryPoint
 class MainActivity : AppCompatActivity(), PopUpDelegator {
 
     private lateinit var firebaseAnalytics: FirebaseAnalytics
-    lateinit var appBarConfiguration:AppBarConfiguration
+    private lateinit var appBarConfiguration:AppBarConfiguration
     private lateinit var navController:NavController
     private lateinit var binding: ActivityMainBinding
     private var alertDialog: AlertDialog? = null

@@ -1,19 +1,15 @@
 // Top-level build file where you can add configuration options common to all sub-projects/modules.
 
 buildscript {
-    ext.kotlin_version = "1.5.10"
     repositories {
         google()
         mavenCentral()
     }
     dependencies {
         def nav_version = "2.5.3"
-        classpath 'com.android.tools.build:gradle:7.0.3'
-        classpath 'org.jetbrains.kotlin:kotlin-gradle-plugin:1.6.10'
+        classpath 'com.android.tools.build:gradle:8.5.0'
+        classpath 'org.jetbrains.kotlin:kotlin-gradle-plugin:1.9.0'
         classpath "androidx.navigation:navigation-safe-args-gradle-plugin:$nav_version"
-        //Para Firebase
-        classpath 'com.google.gms:google-services:4.3.8'
-        classpath 'com.google.gms:google-services:4.3.10'
         // Add the Crashlytics Gradle plugin (be sure to add version
         // 2.0.0 or later if you built your app with Android Studio 4.1).
         classpath 'com.google.firebase:firebase-crashlytics-gradle:2.7.1'
@@ -21,7 +17,7 @@ buildscript {
     }
 }
 plugins {
-    id 'com.google.dagger.hilt.android' version '2.44' apply false
+    id 'com.google.dagger.hilt.android' version '2.48' apply false
 }
 
 allprojects {
