@@ -5,6 +5,7 @@ import android.content.Intent
 import android.net.Uri
 import android.os.Bundle
 import android.view.*
+import androidx.appcompat.content.res.AppCompatResources
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.activityViewModels
 import androidx.navigation.fragment.navArgs
@@ -107,12 +108,16 @@ class DetallePelicula : BaseFragment() {
             true -> {
                 viewModel.operationDbFavorite(FavoritesMoviesUseCase.DELETE,movie.toPeliculaEntity())
                 movie.favorito = false
-                itemFavorito.icon = context?.getDrawable(R.drawable.ic_baseline_favorite_24_normal)
+                context?.let {
+                    itemFavorito.icon = AppCompatResources.getDrawable(it,R.drawable.ic_baseline_favorite_24_normal)
+                }
             }
             false -> {
                 movie.favorito = true
                 viewModel.operationDbFavorite(FavoritesMoviesUseCase.ADD,movie.toPeliculaEntity())
-                itemFavorito.icon = context?.getDrawable(R.drawable.ic_baseline_favorite_24_selected)
+                context?.let {
+                    itemFavorito.icon = AppCompatResources.getDrawable(it ,R.drawable.ic_baseline_favorite_24_selected)
+                }
             }
         }
     }
@@ -138,7 +143,9 @@ class DetallePelicula : BaseFragment() {
         val itemFavorito = menu.findItem(R.id.itemFavorito)
         itemFavorito.isVisible = true
         if (movie.favorito){
-            itemFavorito.icon = context?.getDrawable(R.drawable.ic_baseline_favorite_24_selected)
+            context?.let {
+                itemFavorito.icon = AppCompatResources.getDrawable(it ,R.drawable.ic_baseline_favorite_24_selected)
+            }
         }
 
     }

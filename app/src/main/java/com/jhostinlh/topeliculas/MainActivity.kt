@@ -15,7 +15,6 @@ import androidx.navigation.fragment.NavHostFragment
 import androidx.navigation.ui.*
 import com.google.android.material.bottomnavigation.BottomNavigationView
 import com.google.android.material.navigation.NavigationView
-import com.google.firebase.analytics.FirebaseAnalytics
 import com.jhostinlh.topeliculas.core.functional.DialogCallback
 import com.jhostinlh.topeliculas.core.navigation.PopUpDelegator
 import com.jhostinlh.topeliculas.databinding.ActivityMainBinding
